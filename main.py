@@ -18,6 +18,7 @@ class TeacherDB(db.Model):
 
 class tExistingHandler(webapp.RequestHandler):
     
+    
     def post(self):
     
 	self.session = Session()
@@ -30,7 +31,9 @@ class tExistingHandler(webapp.RequestHandler):
 	    
 	existMsg=""
 	if (tName):
+	    #self.session['id'] = tid
 	    self.session['username'] = tName
+	    #self.session['role'] = 'teacher'
 
 	    existMsg="Welcome back, " + tName
 	else:
@@ -44,7 +47,7 @@ class tExistingHandler(webapp.RequestHandler):
 class tNewHandler(webapp.RequestHandler):
   
   def post(self):
-	
+    
     que = db.Query(TeacherDB)
     db.delete(que)
 	      
@@ -52,6 +55,10 @@ class tNewHandler(webapp.RequestHandler):
 	    
     if (self.request.get("teacherid")):
 	tid=tname+str(randint(1,100))
+	#self.session['id'] = tid
+	self.session['username'] = tname
+	#self.session['role'] = 'teacher'
+	
     tclassid=self.request.get('tclassid')
 	    
     #Create new db for teacher
@@ -124,27 +131,37 @@ class MainHandler(webapp.RequestHandler):
     def get (self):
 
 	    
-      filepath = self.request.path
-      self.session = Session()
+	#filepath = self.request.path
+	self.session = Session()
       
-      loggedUser=""
-      greeting=""
-      if (self.session.get('username')):
-	greeting="Welcome, "
-	loggedUser = self.session.get('username')
+	loggedUser=""
+	greeting=""
+	if (self.session.get('username')):
+		greeting="Welcome, "
+		loggedUser = self.session.get('username')
       	
-      
-      try:
-        temp = os.path.join(os.path.dirname(__file__), 'templates' + filepath)
-	
-      	self.response.headers['Content-Type'] = 'text/html'
-        self.response.out.write(str(template.render(temp,{"loggedUser":loggedUser,"greeting":greeting})))
-        #self.response.out.write(filepath)
-      except:
-      	 temp = os.path.join(os.path.dirname(__file__), 'templates/main.html')
-	 #self.response.out.write(temp)
-	 self.response.headers['Content-Type'] = 'text/html'
-	 self.response.out.write(str(template.render(temp,{'loggedUser':loggedUser, "greeting":greeting})))
+	'''
+	if (self.session.get('role') == 'teacher'):
+	    
+	    
+	    temp = os.path.join(os.path.dirname(__file__), 'templates/teachermain.html')
+	     #self.response.out.write(temp)
+	    self.response.headers['Content-Type'] = 'text/html'
+	    self.response.out.write(str(template.render(temp,{'loggedUser':loggedUser, "greeting":greeting})))
+	 
+	elif (self.session.get('role') == 'student'):
+	    
+	    temp = os.path.join(os.path.dirname(__file__), 'templates/studentmain.html')
+	     #self.response.out.write(temp)
+	    self.response.headers['Content-Type'] = 'text/html'
+	    self.response.out.write(str(template.render(temp,{'loggedUser':loggedUser, "greeting":greeting})))
+	 
+	else:
+	'''
+	temp = os.path.join(os.path.dirname(__file__), 'templates/main.html')
+	     #self.response.out.write(temp)
+	self.response.headers['Content-Type'] = 'text/html'
+	self.response.out.write(str(template.render(temp,{'loggedUser':loggedUser, "greeting":greeting})))
       
 def main ():
   application = webapp.WSGIApplication ([('/logout', LogoutHandler),
