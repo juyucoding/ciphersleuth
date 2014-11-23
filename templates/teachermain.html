@@ -1,0 +1,90 @@
+<html>
+    <head>
+        <title>CipherSleuth</title>
+        <link href="/static/main.css" rel="stylesheet" type="text/css">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <link href='http://fonts.googleapis.com/css?family=Special+Elite|Coming+Soon' rel='stylesheet' type='text/css'>
+    <script language='Javascript' type="text/javascript">
+            
+            var ajaxVariable = false;
+            
+            function ajaxFunction(url)
+            {
+                ajaxVariable = false;
+                
+                try {
+                    ajaxVariable = new XMLHttpRequest();
+                } catch(e){
+                    try {
+                        ajaxVariable = new ActiveXObject("Msxml2.XMLHTTP");
+                    } catch(e) {
+                        try {
+                            ajaxVariable = new ActiveXObject("Microsoft.XMLHTTP");
+                        } catch(e) {
+                            alert("Your browser is not compatible");
+                            return false;
+                        }
+                    }
+                }
+                
+                ajaxVariable.onreadystatechange = ajaxReply;
+                alert(url);
+                var str="hello";
+                var post_str="greeting=" + str;
+                ajaxVariable.open('GET', url, true);
+                ajaxVariable.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                ajaxVariable.setRequestHeader("Connection", "close");
+                
+                ajaxVariable.send(post_str);
+                
+                return true;
+                
+            }
+            
+            function ajaxReply()
+            {
+           
+                if (ajaxVariable.readyState == 4)
+                {
+                    alert(ajaxVariable.status);
+                    
+                    if (ajaxVariable.status == 200)
+                    {
+                        alert(ajaxVariable.responseText);
+                        
+                    }
+                    else
+                    {
+                        alert("Something went wrong!" + ajaxVariable.status.toString() + '.');
+                        return;
+                    }
+                }
+           }
+            
+</script>
+       
+    
+    
+    
+    </head>
+    
+    <body style="background-color:black;">
+        
+        <div id="wrapper">
+        <div id="header">
+            <center>
+            <h1 id='title'><a href="main.html" class="head"><span style="font-size:0.7em">Cipher Sleuth - Teacher</span></a></h1><br />
+            <h3 id="loggineduser"><span style="color:white;" class='lookupid'>{{greeting}}</span><a href="/logout" id='loged'><span style="color:white; text-decoration:underline" class='lookupid'>{{ loggedUser }}</a></span></h3>
+            </center>
+        </div>
+        
+        <div id="content">
+            <!--<center><h2>Please press <a href="/game">HERE</a> to play a game</h2></center>-->
+                <div id="frame">
+                <h2></h2>
+                </div>
+        </div>
+        </div>
+        
+    </body>
+</html>
