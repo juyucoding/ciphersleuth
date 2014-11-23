@@ -67,13 +67,14 @@
     
     </head>
     
-    <body>
+    <body style="background-color:black;">
         
         <div id="wrapper">
         <div id="header">
             <center><h1 id='title'><a href="main.html" class="head">Cipher Sleuth </a></h1></center>
         </div>
         <div id="content">
+            <div id="frame">
             <div id="inner">
             <form method="POST" action="/tnew" accept-charset="utf-8">
             <span style="color:white;" class='lookupid'>Please type your name:</span> <input type="text" name="tname"><br /><br />
@@ -82,7 +83,7 @@
             
             <span style="color:white;" class='lookupid'><h2>{{ tid_msg }}{{ tid }}</h2></span><br />
             <span style="color:white;" class='lookupid'><h2>{{ tclassid_msg }}{{ tclassid }}</h2></span>
-            
+            </div>
            
             </form>
             </div>

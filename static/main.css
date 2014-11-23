@@ -4,33 +4,41 @@ a{
     text-decoration: none;
     color: black;
 }
+
 #wrapper{
-    border:1px solid black;
-    margin-top:100px;
-    height:500px;
-    background-color:black;
+    //border:1px solid black;
+    m//argin-top:100px;
+    //background-color:black;
     
 }
 #header{
-   
+    border:1px solid black;
+    height:200px;
+    background-color:black;
 }
 #header #title a{
     font-size: 4em;
     color:green;
     font-family: 'Special Elite', cursive;
 }
-#content{
+#frame {
     margin-left:400px;
+}
+#content{
+    //margin-left:400px;
+    //background-color:black;
+    min-height:600px;
 }
 #content .login {
     margin-top:70px;
     margin-left:2px;
     float: left;
     display: inline-block;
-    //border:1px solid black;
+    //border:2px solid white;
     padding:20px;
     width:300px;
 }
+
 #content .login a{
     color:white;
     font-size:2em;

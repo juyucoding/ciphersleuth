@@ -68,23 +68,27 @@
     
     </head>
     
-    <body>
+    <body style="background-color:black;">
         
         <div id="wrapper">
         <div id="header">
             <center>
             <h1 id='title'><a href="main.html" class="head">Cipher Sleuth</a></h1>
-            <h3 id="loggineduser"><span style="color:white;" class='lookupid'>{{greeting}}</span><a href="/logout" id='loged'><span style="color:white; text-decoration:underline" class='lookupid'>{{ loggedUser }}</a></span></h3>
             </center>
         </div>
+            
+            
+        
         
         <div id="content">
             <!--<center><h2>Please press <a href="/game">HERE</a> to play a game</h2></center>-->
-                
+                <div id="frame">
+                <h3 id="loggineduser"><span style="color:white;" class='lookupid'>{{greeting}}</span><a href="/logout" id='loged'><span style="color:white; text-decoration:underline" class='lookupid'>{{ loggedUser }}</a></span></h3>
+                <br />
                 <h3 id='existing' class='login'><a href="/login?exist=1">I have an account</a></h3>
                 <h3 id='new' class='login'><a href="/login?exist=0">I am a new user</a></h3>
                 <div id='display'></div>
-                
+                </div>
         </div>
         </div>
         

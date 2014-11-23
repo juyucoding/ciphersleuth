@@ -8,7 +8,7 @@ from google.appengine.ext.webapp import template
 from google.appengine.ext import db
 from util.sessions import Session
 import json
-from random import randint;
+from random import randint
 
 class TeacherDB(db.Model):
     teacher_name = db.StringProperty
@@ -31,9 +31,9 @@ class tExistingHandler(webapp.RequestHandler):
 	    
 	existMsg=""
 	if (tName):
-	    #self.session['id'] = tid
+	    self.session['id'] = tid
 	    self.session['username'] = tName
-	    #self.session['role'] = 'teacher'
+	    self.session['role'] = 'teacher'
 
 	    existMsg="Welcome back, " + tName
 	else:
@@ -45,8 +45,11 @@ class tExistingHandler(webapp.RequestHandler):
 	self.response.out.write(str(template.render(temp,{"emsg":existMsg})))	
     
 class tNewHandler(webapp.RequestHandler):
+
   
   def post(self):
+
+    self.session = Session()
     
     que = db.Query(TeacherDB)
     db.delete(que)
@@ -55,9 +58,9 @@ class tNewHandler(webapp.RequestHandler):
 	    
     if (self.request.get("teacherid")):
 	tid=tname+str(randint(1,100))
-	#self.session['id'] = tid
+	self.session['id'] = tid
 	self.session['username'] = tname
-	#self.session['role'] = 'teacher'
+	self.session['role'] = 'student'
 	
     tclassid=self.request.get('tclassid')
 	    
@@ -76,7 +79,8 @@ class LogoutHandler(webapp.RequestHandler):
 	    
 	self.session=Session()
 	self.session.delete_item('username')
-	
+	self.session.delete_item('role')
+	self.session.delete_item('tid')
 	
 	logoutmsg="You are not logged out"
 	
@@ -140,10 +144,10 @@ class MainHandler(webapp.RequestHandler):
 		greeting="Welcome, "
 		loggedUser = self.session.get('username')
       	
-	'''
+	
 	if (self.session.get('role') == 'teacher'):
 	    
-	    
+	   
 	    temp = os.path.join(os.path.dirname(__file__), 'templates/teachermain.html')
 	     #self.response.out.write(temp)
 	    self.response.headers['Content-Type'] = 'text/html'
@@ -157,14 +161,34 @@ class MainHandler(webapp.RequestHandler):
 	    self.response.out.write(str(template.render(temp,{'loggedUser':loggedUser, "greeting":greeting})))
 	 
 	else:
-	'''
-	temp = os.path.join(os.path.dirname(__file__), 'templates/main.html')
-	     #self.response.out.write(temp)
-	self.response.headers['Content-Type'] = 'text/html'
-	self.response.out.write(str(template.render(temp,{'loggedUser':loggedUser, "greeting":greeting})))
+	    
+	    temp = os.path.join(os.path.dirname(__file__), 'templates/main.html')
+	    self.response.headers['Content-Type'] = 'text/html'
+	    self.response.out.write(str(template.render(temp,{'loggedUser':loggedUser, "greeting":greeting})))
       
+class SmainHanlder(webapp.RequestHandler):
+   
+    def get(self):
+	operation = self.request.get("op")
+	
+	#control
+	if(operation=='0'):
+	    temp = os.path.join(os.path.dirname(__file__), 'templates/scontrol.html')
+	    self.response.headers['Content-Type'] = 'text/html'
+	    self.response.out.write(str(template.render(temp,{})))
+	#start a new game
+	elif(operation=='1'):
+	    temp = os.path.join(os.path.dirname(__file__), 'templates/sgame1.html')
+	    self.response.headers['Content-Type'] = 'text/html'
+	    self.response.out.write(str(template.render(temp,{})))
+	else:
+	    temp = os.path.join(os.path.dirname(__file__), 'templates/main.html')
+	    self.response.headers['Content-Type'] = 'text/html'
+	    self.response.out.write(str(template.render(temp,{})))
+	    
 def main ():
-  application = webapp.WSGIApplication ([('/logout', LogoutHandler),
+  application = webapp.WSGIApplication ([('/smain', SmainHanlder),
+					('/logout', LogoutHandler),
 					('/texisting', tExistingHandler),
 					('/tnew', tNewHandler),
 					('/login', LoginHandler),
