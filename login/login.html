@@ -1,0 +1,54 @@
+<html>
+    <head>
+        <title>Pay Off Game - Main Page</title>
+  
+        
+        
+    </head>
+    <body>
+            <center>
+            <div id="wrapper">
+            <div id="header">
+                <h1><a href="main.html" class="head">PayOff Game</a></h1>
+                <ul>
+                        <li><a href="doc.html" class="head">Help/Documentation</a></li>
+                        <li><a href="/login" class="head">Log In</a></li>
+                </ul>
+            
+            </div>
+            <div id="content">
+                
+                <center>
+                <h1>Log In</h1>
+                </center>
+                <center>
+                <table border=1 colspan=2 id="login" style="margin:10%" cellpadding=10 width=400>
+                <tr>
+                    <form method="post" action="/login">
+                    <td>ID:</td>
+                    <td><input type="text" name="id"></td>
+                </tr>
+                <tr>
+                    <td>Password</td>
+                    <td><input type="password" name="pwd"></td>
+                </tr>
+                <tr>
+                    <td><center><input type="submit" value="Log In" style="width:50%;"></td>
+                    <td><center><input type="reset" value="Reset" style="width:50%;"></center></td>
+                    
+                </tr>
+                </table>
+                <h2>{{ error }}</h2>
+                </center>
+                
+                </form>
+                
+                </center>
+            
+            </div>
+            </div>
+            </center>
+       
+        
+    </body>
+</html>
