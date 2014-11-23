@@ -1,0 +1,33 @@
+<html>
+    <head>
+        <title>CipherSleuth</title>
+        <link href="/static/main.css" rel="stylesheet" type="text/css">
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+        
+        
+    </head>
+    <body>
+        
+        <div id="wrapper">
+        <div id="header">
+            <center><h1 id='title'><a href="main.html" class="head">Cipher Sleuth</a></h1></center>
+        </div>
+        <div id="content">
+            <!--<center><h2>Please press <a href="/game">HERE</a> to play a game</h2></center>-->
+            <div id="inner">
+            <br /><br />    
+            <h2 id='role'>I'm a ... </h2>
+            
+            <form method="post" action="/login">
+            
+            <input type="submit" value="TEACHER" name="role">
+            <input type="submit" value="STUDENT" name="role">
+            <br /><br />    
+            </form>
+            </div>
+            </div>
+           
+        </div>
+        
+    </body>
+</html>

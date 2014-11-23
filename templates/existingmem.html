@@ -1,0 +1,30 @@
+<html>
+    <head>
+        <title>CipherSleuth</title>
+        <link href="/static/main.css" rel="stylesheet" type="text/css">
+        
+    </head>
+    <body>
+        
+        <div id="wrapper">
+        <div id="header">
+            <center><h1 id='title'><a href="main.html" class="head">Cipher Sleuth</a></h1></center>
+        </div>
+        <div id="content">
+            
+                <br />
+            <!--<center><h2>Please press <a href="/game">HERE</a> to play a game</h2></center>-->
+                <div id="inner">
+                <form method="POST" action="/texisting">
+                <span style="color:white;" class='lookupid'><p>Please type your userID</p></span>
+                <input type='text' name='tidlookup'></input>
+                <input type="submit" value="Submit">
+                </form>
+                <br />
+                <span style="color:white;" class='lookupid'><h3>{{ emsg }}</h3></span>
+                </div>
+        </div>
+        </div>
+        
+    </body>
+</html>
