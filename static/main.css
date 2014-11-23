@@ -1,0 +1,65 @@
+@import url(http://fonts.googleapis.com/css?family=Special+Elite|Shadows+Into+Light+Two);
+
+a{
+    text-decoration: none;
+    color: black;
+}
+#wrapper{
+    border:1px solid black;
+    margin-top:100px;
+    height:500px;
+    background-color:black;
+    
+}
+#header{
+   
+}
+#header #title a{
+    font-size: 4em;
+    color:green;
+    font-family: 'Special Elite', cursive;
+}
+#content{
+    margin-left:400px;
+}
+#content .login {
+    margin-top:70px;
+    margin-left:2px;
+    float: left;
+    display: inline-block;
+    //border:1px solid black;
+    padding:20px;
+    width:300px;
+}
+#content .login a{
+    color:white;
+    font-size:2em;
+    font-family: 'Shadows Into Light Two', cursive;
+}
+#content .login a:hover{
+    color:gray;
+}
+
+.login a:hover{
+    background:white;
+    
+}
+#role {
+   font-family: 'Shadows Into Light Two', cursive; 
+ font-size:2.3em;
+ color:white;
+}
+#inner {
+    margin-left:80px;
+}
+#innerframe{
+    //margin-left:100px;
+}
+#logout{
+    color:white;
+    font-size:1.5em;
+}
+.lookupid{
+    font-size:2em;
+    font-family: 'Shadows Into Light Two', cursive;
+}
