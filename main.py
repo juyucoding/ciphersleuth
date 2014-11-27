@@ -166,9 +166,12 @@ class MainHandler(webapp.RequestHandler):
 	    self.response.headers['Content-Type'] = 'text/html'
 	    self.response.out.write(str(template.render(temp,{'loggedUser':loggedUser, "greeting":greeting})))
       
-class SmainHanlder(webapp.RequestHandler):
+class SmainHandler(webapp.RequestHandler):
    
     def get(self):
+	self.session=Session()
+	
+	username = self.session.get("username")
 	operation = self.request.get("op")
 	
 	#control
@@ -178,16 +181,52 @@ class SmainHanlder(webapp.RequestHandler):
 	    self.response.out.write(str(template.render(temp,{})))
 	#start a new game
 	elif(operation=='1'):
-	    temp = os.path.join(os.path.dirname(__file__), 'templates/sgame1.html')
+	    temp = os.path.join(os.path.dirname(__file__), 'templates/sgameintro.html')
 	    self.response.headers['Content-Type'] = 'text/html'
-	    self.response.out.write(str(template.render(temp,{})))
+	    self.response.out.write(str(template.render(temp,{"username":username})))
 	else:
 	    temp = os.path.join(os.path.dirname(__file__), 'templates/main.html')
 	    self.response.headers['Content-Type'] = 'text/html'
 	    self.response.out.write(str(template.render(temp,{})))
 	    
+class GameHandler(webapp.RequestHandler):
+    
+    
+    def get(self):
+	self.session=Session() 
+	username=self.session.get("username")
+	level=self.request.get("level")
+	
+	if (level=='1'):
+	    temp = os.path.join(os.path.dirname(__file__), 'templates/game1.html')
+	
+	self.response.headers['Content-Type'] = 'text/html'
+	self.response.out.write(str(template.render(temp,{"username":username})))
+    
+    def post(self):
+	self.session=Session() 
+	username=self.session.get("username")
+	
+	operation=self.request.get("op")
+	decoded=self.request.get("decodedmsg")
+	error_msg=""
+	msg=""
+	
+	if (operation=='11'):
+	    
+	    temp = os.path.join(os.path.dirname(__file__), 'templates/game1.html')
+	    flag = (decoded=='apple')
+	    if(decoded=='apple'):
+		msg="CONTINUE"	
+	    else:
+		error_msg="I'm sorry. Your decode seems incorrect. Please try again."
+	
+	self.response.headers['Content-Type'] = 'text/html'
+	self.response.out.write(str(template.render(temp,{"username":username, 'error_msg': error_msg, 'msg':msg})))
+	
 def main ():
-  application = webapp.WSGIApplication ([('/smain', SmainHanlder),
+  application = webapp.WSGIApplication ([('/smain', SmainHandler),
+					('/game', GameHandler),
 					('/logout', LogoutHandler),
 					('/texisting', tExistingHandler),
 					('/tnew', tNewHandler),

@@ -68,26 +68,31 @@
     
     </head>
     
-    <body>
+    <body style="background-image:url('/image/hackimage.jpg'); background-size:cover;">
         
         <div id="wrapper">
         <div id="header">
             <h1 id='title' class='group'><a href="main.html" class="head">Cipher Sleuth </a></h1>
         </div>
-         <h1 id='username' class='group'>Current user: {{username}}</h1>
+        <h1 id='username' class='group'>Current user: {{username}}</h1>
+         
         
         <div id="gcontent">
             <!--<center><h2>Please press <a href="/game">HERE</a> to play a game</h2></center>-->
-                <div id="letter">
-                    <div id="instruction">
-                        <br /><br />
-                        <p>Hello, {{ username }}</p>
-                        <p>this is an instruction for the game</p>
+                <div id="gIntro">
+                    <center>
+                    <div id="gIntro_inner">
+                        <h1>Welcome to CipherSleuth!</h1>
+                        <p>As you walk in to the house, you found a ltter that is from a mysterious person and it says the person needs your help.</p>
+                        <p>As a mystery solver, you can't resister the temptation and it says that it is something about your grandmother.</p>
+                        <p>"You: My grandmother? Hmm, what would it be? She passed away a few years ago..."</p>
+                        <p>In the end of the letter, it has just cryptic alphabets and seems just non sensical.</p>
+                        <p>"You: Well, it is kinda intriguing though.. What can possibly happen if I just try to solve this puzzle?!"</p>
+                        <br />
+                        <span id='continue'><a href="/game?level=1">CONTINUE</a></span>
                     </div>
+                    </center>
                 
-                </div>
-                <div id="terminal">
-                    
                 </div>
         </div>
         </div>

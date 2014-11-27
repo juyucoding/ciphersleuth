@@ -1,11 +1,17 @@
+@import url(http://fonts.googleapis.com/css?family=Special+Elite|Shadows+Into+Light+Two);
+@import url(http://fonts.googleapis.com/css?family=Special+Elite|Shadows+Into+Light+Two|Calligraffitti);
+@import url(http://fonts.googleapis.com/css?family=Special+Elite|Shadows+Into+Light+Two|Calligraffitti|Audiowide);
 a{
     text-decoration: none;
     color: black;
 }
+#introimage{
+    background-image: url('image/FileDetective.png');
+}
 #header{
     //border:1px solid black;
-    height:20px;
-   
+    height:80px;
+    background-color:black;
 }
 #header #title a{
     font-size: 2em;
@@ -15,27 +21,86 @@ a{
     
 }
 #username {
-    margin-left:200px;
-    font-size:1.3em;
+    color: white;
+    margin-left:8px;
+    font-size:1.5em;
     float:left;
-    
+    font-family: 'Shadows Into Light Two', cursive; 
 }
 #gcontent{
-    margin-left:
-    border-top:1px solid black;
+    margin-left:10px;
+    //border-top:1px solid black;
     display:inline-block;
     
 }
 #letter{
-    height:500px;
-    width:600px;
-    border:1px solid black;
+    height:580px;
+    width:700px;
+    //border:1px solid black;
     float:left;
     background-image:url("/image/letter.png");
+    margin-left:20px;
+}
+#instruction{
+    
+    font-size:1.5em;
+    padding:10px;
+    margin:5px;
+    //border:1px solid black;
+    width: 630px;
+    height:550px;
+    padding-left:40px;
+    font-family: 'Calligraffitti', cursive;
+    overflow:scroll;
 }
 #terminal{
-    height:500px;
-    width:600px;
+    margin-left:20px;
+    background-color:white;
+    height:580px;
+    width:650px;
     border: 1px solid black;
     float:left;
 }
+#gInterface{
+    margin-top: 20px;
+}
+#gIntro{
+    
+    border:1px solid black;
+    background-color:#F0F0F0;
+    margin-top:80px;
+    width:950px;
+    height:600px;
+    opacity:0.7;
+}
+#gIntro_inner{
+    font-size: 1.3em;
+    font-family: 'Audiowide', cursive;
+    margin-top: 80px;
+    overflow: scroll;
+    
+}
+#msg_box {
+    background-color:black;
+}
+#error_text{
+    color:red;
+    font-size:1.7em;
+    font-family: 'Audiowide';
+}
+#msg_text a{
+    color:white;
+    font-size:1.7em;
+    font-family: 'Audiowide';
+}
+#continue a:hover{
+    color:black;
+    background-color:green;
+}
+#decoded_msg{
+    color:white;
+    font-family: 'Audiowide';
+    
+
+}
+
