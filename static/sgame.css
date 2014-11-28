@@ -101,6 +101,43 @@ a{
     color:white;
     font-family: 'Audiowide';
     
-
+}
+#grandma_letter{
+    height:580px;
+    width:900px;
+    //border:1px solid black;
+    float:left;
+    background-image:url("/image/letter.png");
+    margin-left:20px;   
+}
+#final_instruction{
+    
+    font-size:1.5em;
+    padding:10px;
+    margin:5px;
+    //border:1px solid black;
+    width: 800px;
+    height:550px;
+    padding-left:40px;
+    font-family: 'Calligraffitti', cursive;
+    overflow:scroll;
+}
+#final_text{
+    color: white;
+    font-size:1.5em;
+    margin-top:70px;
+}
+#final{
+    height:580px;
+    width:900px;
+    //border:1px solid black;
+    float:left;
+    background-image:url("/image/hackimage.jpg");
+    margin-left:20px;   
+    
+}
+.final_decision a:hover{
+    background-color:black;
+    color:white;
 }
 

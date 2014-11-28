@@ -81,7 +81,7 @@
         <div id="gcontent">
             <!--<center><h2>Please press <a href="/game">HERE</a> to play a game</h2></center>-->
             <div id='decoded'>
-                <form method='post' action="/game?op=11"><center>
+                <form method='post' action="/game?op=15"><center>
                     {%ifequal solved None %}
                     <span id='decoded_msg'>Decoded message: <input type="text" name='decodedmsg' size=100;></span><input type="submit" VALUE="SUBMIT">
                     {%endifequal%}
@@ -90,20 +90,19 @@
             </div>
             <div id='msg_box'>
                 <center><h2 id='error_text'>{{ error_msg }}</h2>
-                <h2 id='msg_text'><a href="/game?level=2">{{ msg }}</a></h2></center>
+                <h2 id='msg_text'><a href="/game?level=0">{{ msg }}</a></h2></center>
             </div>
                 <div id="ginterface">
                     <div id="letter">
                         <div id="instruction">
-                        <p>Hello, {{ username }}</p>
-                        <p>I know you find this letter very strange but I want you to stay with me for the mission.</p>
-                        <p>Your grandmother was the best engineer in the world and she worked on a very important project at NASA.
-                        She often talked about you quite often while we were working together, so I decided you would be the best person to be in charge of this task.</p>
-                        <p>I will tell you more detail as we work together, but I can tell you this task is related with your grandmother and it has to be kept in secret. So the rest of
-                        instruction is encoded as below.To decode this message, follow this instruction. On your left, you can work on terminal with samples</p>
+                        <p>Dear, {{ username }}</p>
+                        <p>Finally we are here. I am very proud of you that you made it! It has been a great time working with you and I truly believe that you are very talanted!
+                        In order to complete the mission, there is one final step. It won't be easy, but I frimly believe you can do it.</p>
+                        <p>This last message will tell you where to go and the code that you will need. Please practice with terminal on the left before you leave.</p>
                         <p>{instruction goes here}</p>
-                        <p>Encoded msg: GO TO LIBRARY</p>
-                        <p>I wish you best luck!</p>
+                        <p>Encoded msg: GO TO GRANDMOTHER HOUSE. CODE NUMBER LIFE IS 42.</p>
+                        
+                        <p>I wish your best luck and hope I can see you again!</p>
                         
                         <p>Sincerely,</p>
                         <p>Mrs.J</p>

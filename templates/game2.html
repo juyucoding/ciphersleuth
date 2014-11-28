@@ -81,7 +81,8 @@
         <div id="gcontent">
             <!--<center><h2>Please press <a href="/game">HERE</a> to play a game</h2></center>-->
             <div id='decoded'>
-                <form method='post' action="/game?op=11"><center>
+                
+                <form method='post' action="/game?op=12"><center>
                     {%ifequal solved None %}
                     <span id='decoded_msg'>Decoded message: <input type="text" name='decodedmsg' size=100;></span><input type="submit" VALUE="SUBMIT">
                     {%endifequal%}
@@ -90,20 +91,19 @@
             </div>
             <div id='msg_box'>
                 <center><h2 id='error_text'>{{ error_msg }}</h2>
-                <h2 id='msg_text'><a href="/game?level=2">{{ msg }}</a></h2></center>
+                <h2 id='msg_text'><a href="/game?level=3">{{ msg }}</a></h2></center>
             </div>
                 <div id="ginterface">
                     <div id="letter">
                         <div id="instruction">
-                        <p>Hello, {{ username }}</p>
-                        <p>I know you find this letter very strange but I want you to stay with me for the mission.</p>
-                        <p>Your grandmother was the best engineer in the world and she worked on a very important project at NASA.
-                        She often talked about you quite often while we were working together, so I decided you would be the best person to be in charge of this task.</p>
-                        <p>I will tell you more detail as we work together, but I can tell you this task is related with your grandmother and it has to be kept in secret. So the rest of
-                        instruction is encoded as below.To decode this message, follow this instruction. On your left, you can work on terminal with samples</p>
+                        <p>Dear, {{ username }}</p>
+                        <p>Hi, great job on decoding the message! By the time you recieve the letter, you probably just solved it or less. Now, with the decoded message I have
+                        another mission for you.</p>
+                        <p>This will tell you what to get and where to go next. The item will be very useful when you do the final mission. <i>[Hint: This book is wirtten by your grandmother/]</i></p>
+                        <p>Here is my message. Please use the termnal for your practice. Oh one important thing, don't leave the house until you solve this message. It is very crucial.</p>
                         <p>{instruction goes here}</p>
-                        <p>Encoded msg: GO TO LIBRARY</p>
-                        <p>I wish you best luck!</p>
+                        <p>Encoded msg: 1)AT THE LIBRARY, GET MYSTERY OF TIME AND SCRETE OF MATH AND GO TO THE AIRPORT. BRING THE BOOKS WITH YOU</p>
+                        <p>I wish your best luck!</p>
                         
                         <p>Sincerely,</p>
                         <p>Mrs.J</p>

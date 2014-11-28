@@ -10,6 +10,7 @@ from util.sessions import Session
 import json
 from random import randint
 
+
 class TeacherDB(db.Model):
     teacher_name = db.StringProperty
     teacher_id=db.StringProperty
@@ -82,7 +83,7 @@ class LogoutHandler(webapp.RequestHandler):
 	self.session.delete_item('role')
 	self.session.delete_item('tid')
 	
-	logoutmsg="You are not logged out"
+	logoutmsg="You are now logged out"
 	
 	temp = os.path.join(os.path.dirname(__file__), 'templates/logout.html')
 	
@@ -193,36 +194,127 @@ class GameHandler(webapp.RequestHandler):
     
     
     def get(self):
-	self.session=Session() 
+	self.session=Session()
+	self.session['userCheck']=0
 	username=self.session.get("username")
 	level=self.request.get("level")
+	self.session['level']=level
+	final=self.request.get("c")
+	errormsg=""
+	
+	currentlevel=self.session.get('userCheck')
 	
 	if (level=='1'):
+	    self.session.delete_item("userCheck")
+	    self.session['userCheck']=1
+	    currentlevel=self.session.get('userCheck')
 	    temp = os.path.join(os.path.dirname(__file__), 'templates/game1.html')
 	
+	elif (level=='2'):
+	    currentlevel=self.session.get("userCheck")
+	    if (currentlevel <= 1):
+		errormsg="You are not allowed to the page!"
+		temp = os.path.join(os.path.dirname(__file__), 'templates/game' + str(currentlevel)+'.html')
+	    else:
+		self.session.delete_item("userCheck")
+		self.session['userCheck']=2
+		currentlevel=self.session.get('userCheck')
+		temp = os.path.join(os.path.dirname(__file__), 'templates/game2.html')
+		
+	elif (level=='3'):
+	    currentlevel=self.session.get("userCheck")
+	    if (currentlevel <= 2):
+		errormsg="You are not allowed to the page!"
+		temp = os.path.join(os.path.dirname(__file__), 'templates/game' + str(currentlevel)+'.html')
+	    else:
+		self.session.delete_item("userCheck")
+		self.session['userCheck']=2
+		currentlevel=self.session.get('userCheck')
+		temp = os.path.join(os.path.dirname(__file__), 'templates/game3.html')    
+	    
+	elif (level=='4'):
+	    self.session['userCheck']=4
+	    temp = os.path.join(os.path.dirname(__file__), 'templates/game4.html')
+	elif (level=='5'):
+	    self.session['userCheck']=5
+	    temp = os.path.join(os.path.dirname(__file__), 'templates/game5.html')
+	elif (level=='0'):
+	    self.session['userCheck']=0
+	    temp = os.path.join(os.path.dirname(__file__), 'templates/game0.html')
+	elif (final=="1"):
+	    temp = os.path.join(os.path.dirname(__file__), 'templates/gameterm.html')
+	    
 	self.response.headers['Content-Type'] = 'text/html'
-	self.response.out.write(str(template.render(temp,{"username":username})))
+	self.response.out.write(str(template.render(temp,{"username":username, "level":level+" / 5", "error_msg":currentlevel})))
     
     def post(self):
 	self.session=Session() 
 	username=self.session.get("username")
-	
+	level=self.session.get("level")
 	operation=self.request.get("op")
 	decoded=self.request.get("decodedmsg")
 	error_msg=""
 	msg=""
+	solved=None
+	flag=True
+	
 	
 	if (operation=='11'):
 	    
 	    temp = os.path.join(os.path.dirname(__file__), 'templates/game1.html')
-	    flag = (decoded=='apple')
 	    if(decoded=='apple'):
+		msg="CONTINUE"
+		solved=1
+		flag=False
+	    #start session for putting the level into the db
+	elif (operation=='12'):
+	
+	    temp = os.path.join(os.path.dirname(__file__), 'templates/game2.html')
+	    if(decoded=='banana'):
+		flag=False
+		solved=1
 		msg="CONTINUE"	
-	    else:
-		error_msg="I'm sorry. Your decode seems incorrect. Please try again."
+	    
+	elif (operation=='13'):
+	    
+	    temp = os.path.join(os.path.dirname(__file__), 'templates/game3.html')
+	    if(decoded=='kiwi'):
+		flag=False
+		solved=1
+		msg="CONTINUE"	
+	    
+	elif (operation=='14'):
+	    
+	    temp = os.path.join(os.path.dirname(__file__), 'templates/game4.html')
+	    if(decoded=='tomato'):
+		flag=False
+		solved=1
+		msg="CONTINUE"
+		
+	elif (operation=='15'):
+	    
+	    temp = os.path.join(os.path.dirname(__file__), 'templates/game5.html')
+	    if(decoded=='pineapple'):
+		flag=False
+		solved=1
+		msg="CONTINUE"	
+	elif (operation=='0'):
+	    
+	    
+	    temp = os.path.join(os.path.dirname(__file__), 'templates/game0.html')
+	    if(decoded=='42'):
+		
+		flag=False
+		solved=1
+		msg="CONTINUE"
+	
+	
+	if(flag):
+	    error_msg="I'm sorry. Your decode seems incorrect. Please try again."
+	    
 	
 	self.response.headers['Content-Type'] = 'text/html'
-	self.response.out.write(str(template.render(temp,{"username":username, 'error_msg': error_msg, 'msg':msg})))
+	self.response.out.write(str(template.render(temp,{"username":username, 'error_msg': error_msg, 'msg':msg, "level":level+" / 5", "solved":solved})))
 	
 def main ():
   application = webapp.WSGIApplication ([('/smain', SmainHandler),
