@@ -16,18 +16,19 @@ class TeacherDB(db.Model):
     teacher_id=db.StringProperty
     teacher_class_id=db.StringProperty
 	
-class StudentDB(ndb.Model):
-	username = ndb.StringProperty()
-	sid = ndb.StringProperty()
-	gameid = ndb.IntegerProperty()
-	classid = ndb.IntegerProperty()
-	level_1 = ndb.BooleanProperty(default=False)
-	level_2 = ndb.BooleanProperty(default=False)
-	level_3 = ndb.BooleanProperty(default=False)
-	level_4 = ndb.BooleanProperty(default=False)
-	level_5 = ndb.BooleanProperty(default=False)
-	attempt = ndb.IntegerProperty(default=0)
-	last_login = ndb.DateTimeProperty(auto_now=True)
+class StudentDB(db.Model):
+	student_name = db.StringProperty()
+	student_id = db.StringProperty()
+	gameid = db.IntegerProperty()
+	classid = db.IntegerProperty()
+	level_1 = db.BooleanProperty(default=False)
+	level_2 = db.BooleanProperty(default=False)
+	level_3 = db.BooleanProperty(default=False)
+	level_4 = db.BooleanProperty(default=False)
+	level_5 = db.BooleanProperty(default=False)
+	attempt = db.IntegerProperty(default=0)
+	last_login = db.DateTimeProperty(auto_now=True)
+	'''
 	@classmethod
 	def newID(cls):
 		num = random.randint(10000,99999)
@@ -43,40 +44,60 @@ class StudentDB(ndb.Model):
 		studentprof = StudentDB.get_by_id(id_num)
 		if studentprof:
 			return True
-		else
+		else:
 			return False
 	@classmethod
 	def existingStudent(cls, id_num):
 		return StudentDB.get_by_id(id_num)
-
-class tExistingHandler(webapp.RequestHandler):
-    
+	'''
+class ExistingHandler(webapp.RequestHandler):
     
     def post(self):
-    
-	self.session = Session()
 	
-	id_lookup= self.request.get("tidlookup")
-	#tid_lookup=TeacherDB.gql("WHERE teacher_id=" + id_lookup)
-	#tName = tid_lookup.teacher_name
+	self.session=Session()
+	role=self.request.get("role")
+	id_lookup= self.request.get("idlookup")
+	
+	
+	if (role == "student"):
+	    temp=os.path.join(os.path.dirname(__file__), 'templates/studentmain.html')
+	    #sid_lookup=StudentDB.gql("WHERE student_id=" + id_lookup)
+	    #sid=sid_lookup.student_id
+	    #sName = sid_lookup.student_name
+	    #sClass = sid_lookup.classid
     
-	tName=id_lookup
-	    
-	existMsg=""
-	if (tName):
-	    self.session['id'] = tid
-	    self.session['username'] = tName
-	    self.session['role'] = 'teacher'
+	    sName=id_lookup
+	    existMsg=""
+	    if (sName):
+		#self.session['id'] = sid
+		self.session['username'] = sName
+		self.session['role'] = 'student'
 
-	    existMsg="Welcome back, " + tName
-	else:
-	    existMsg="Sorry you are not registered yet"
-	
+		existMsg="Welcome back, " + sName
+	    else:
+		existMsg="Sorry you are not registered yet student"
 	    
-	temp=os.path.join(os.path.dirname(__file__), 'templates/existingmem.html')
-	self.response.headers['Content-Type'] = 'text/html'
-	self.response.out.write(str(template.render(temp,{"emsg":existMsg})))	
+	elif (role == "teacher"):
+	    temp=os.path.join(os.path.dirname(__file__), 'templates/teachermain.html')
+	    #tid_lookup=TeacherDB.gql("WHERE teacher_id=" + id_lookup)
+	    #tName = tid_lookup.teacher_name
     
+	    tName=id_lookup
+	    
+	    existMsg=""
+	    if (tName):
+		#self.session['id'] = tid
+		self.session['username'] = tName
+		self.session['role'] = 'teacher'
+
+		existMsg="Welcome back, " + tName
+	    else:
+		existMsg="Sorry you are not registered yet"
+	
+	
+	self.response.headers['Content-Type'] = 'text/html'
+	self.response.out.write(str(template.render(temp,{"emsg":role})))
+  
 class tNewHandler(webapp.RequestHandler):
 
   
@@ -90,7 +111,7 @@ class tNewHandler(webapp.RequestHandler):
     tname=self.request.get("tname")
 	    
     if (self.request.get("teacherid")):
-	tid=tname+str(randint(1,100))
+	tid=tname+str(randint(10000,99999))
 	self.session['id'] = tid
 	self.session['username'] = tname
 	self.session['role'] = 'teacher'
@@ -103,33 +124,9 @@ class tNewHandler(webapp.RequestHandler):
 	     
     temp=os.path.join(os.path.dirname(__file__), 'templates/logint.html')
     self.response.headers['Content-Type'] = 'text/html'
-    self.response.out.write(str(template.render(temp,{"tid":tid, "tid_msg":"Your userID is:  ", "tclassid_msg":"Your class id is:  ", "tclassid":tclassid})))	
+    self.response.out.write(str(template.render(temp,{"tid":tid, "tid_msg":"Your userID is:  ", "tclassid_msg":"Your class id is:  ", "tclassid":tclassid})))
+    
 
-class sExistingHandler(webapp.RequestHandler):
-    
-    
-    def post(self):
-    
-	self.session = Session()
-	
-	id_lookup = self.request.get("sidlookup")
-	id_exists = StudentDB.oldID(id_lookup)
-	existMsg=""
-	if (id_exists):
-		student = StudentDB.existingStudent(id_lookup)
-	    self.session['id'] = student.sid
-	    self.session['username'] = student.username
-	    self.session['role'] = 'student'
-
-	    existMsg="Welcome back, " + student.username
-	else:
-	    existMsg="Sorry you are not registered yet"
-	
-	    
-	temp=os.path.join(os.path.dirname(__file__), 'templates/existingmem.html')
-	self.response.headers['Content-Type'] = 'text/html'
-	self.response.out.write(str(template.render(temp,{"emsg":existMsg})))	
-    
 class sNewHandler(webapp.RequestHandler):
 
   
@@ -141,15 +138,15 @@ class sNewHandler(webapp.RequestHandler):
     db.delete(que)
 	      
     sname=self.request.get("sname")
-	id = StudentDB.newID()    
+    sid=sname+str(randint(10000,99999))
     self.session['id'] = sid
-	self.session['username'] = sname
-	self.session['role'] = 'student'
+    self.session['username'] = sname
+    self.session['role'] = 'student'
 	
     sclassid=self.request.get('sclassid')
 	    
     #Create new db for student
-    newDB = StudentDB(username=sname, sid=id, classid=sclassid)
+    newDB = StudentDB(username=sname, sid=sid, classid=sclassid)
     newDB.put()
 	     
     temp=os.path.join(os.path.dirname(__file__), 'templates/logins.html')
@@ -182,7 +179,7 @@ class LoginHandler(webapp.RequestHandler):
 	existing = self.request.get("exist")
     
 	if existing == '1':
-	    temp=os.path.join(os.path.dirname(__file__), 'templates/existingmem.html')
+	    temp=os.path.join(os.path.dirname(__file__), 'templates/existingcheck.html')
 	else:
 	    temp=os.path.join(os.path.dirname(__file__), 'templates/newmem.html')
 
@@ -404,9 +401,10 @@ def main ():
   application = webapp.WSGIApplication ([('/smain', SmainHandler),
 					('/game', GameHandler),
 					('/logout', LogoutHandler),
-					('/texisting', tExistingHandler),
 					('/tnew', tNewHandler),
+					('/snew', sNewHandler),
 					('/login', LoginHandler),
+					('/existing', ExistingHandler),
 					('/.*', MainHandler)], debug=True)
   wsgiref.handlers.CGIHandler().run(application)
 

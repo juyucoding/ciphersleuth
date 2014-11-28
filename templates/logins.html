@@ -76,16 +76,16 @@
         <div id="content">
             <div id="frame">
             <div id="inner">
-            <form method="POST" action="/snew" accept-charset="utf-8">
+            <form method="POST" action="/snew">
             <span style="color:white;" class='lookupid'>Please type your name:</span> <input type="text" name="sname"><br /><br />
             <span style="color:white;" class='lookupid'>Please type class id number:</span> <input type="text" name="sclassid"><br /><br />
-            <input type="submit" value="GET USER ID" name="studentid"><br /><br />
-            
+            <input type="submit" value="GET STUDENT USER ID" name="studentid"><br /><br />
+            </form>
             <span style="color:white;" class='lookupid'><h2>{{ sid_msg }}{{ sid }}</h2></span><br />
             <span style="color:white;" class='lookupid'><h2>{{ sclassid_msg }}{{ sclassid }}</h2></span>
             </div>
            
-            </form>
+            
             </div>
             </div>
         </div>
