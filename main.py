@@ -15,7 +15,39 @@ class TeacherDB(db.Model):
     teacher_name = db.StringProperty
     teacher_id=db.StringProperty
     teacher_class_id=db.StringProperty
-    
+	
+class StudentDB(ndb.Model):
+	username = ndb.StringProperty()
+	sid = ndb.StringProperty()
+	gameid = ndb.IntegerProperty()
+	classid = ndb.IntegerProperty()
+	level_1 = ndb.BooleanProperty(default=False)
+	level_2 = ndb.BooleanProperty(default=False)
+	level_3 = ndb.BooleanProperty(default=False)
+	level_4 = ndb.BooleanProperty(default=False)
+	level_5 = ndb.BooleanProperty(default=False)
+	attempt = ndb.IntegerProperty(default=0)
+	last_login = ndb.DateTimeProperty(auto_now=True)
+	@classmethod
+	def newID(cls):
+		num = random.randint(10000,99999)
+		sid = 'S%s' % num
+		studentprof = StudentDB.get_by_id(sid)
+		while studentprof:
+			num = random.randint(10000,99999)
+			sid = 'S%s' % num
+			studentprof = StudentDB.get_by_id(sid)
+		return sid
+	@classmethod
+	def oldID(cls, id_num):
+		studentprof = StudentDB.get_by_id(id_num)
+		if studentprof:
+			return True
+		else
+			return False
+	@classmethod
+	def existingStudent(cls, id_num):
+		return StudentDB.get_by_id(id_num)
 
 class tExistingHandler(webapp.RequestHandler):
     
@@ -61,7 +93,7 @@ class tNewHandler(webapp.RequestHandler):
 	tid=tname+str(randint(1,100))
 	self.session['id'] = tid
 	self.session['username'] = tname
-	self.session['role'] = 'student'
+	self.session['role'] = 'teacher'
 	
     tclassid=self.request.get('tclassid')
 	    
@@ -72,7 +104,59 @@ class tNewHandler(webapp.RequestHandler):
     temp=os.path.join(os.path.dirname(__file__), 'templates/logint.html')
     self.response.headers['Content-Type'] = 'text/html'
     self.response.out.write(str(template.render(temp,{"tid":tid, "tid_msg":"Your userID is:  ", "tclassid_msg":"Your class id is:  ", "tclassid":tclassid})))	
+
+class sExistingHandler(webapp.RequestHandler):
+    
+    
+    def post(self):
+    
+	self.session = Session()
+	
+	id_lookup = self.request.get("sidlookup")
+	id_exists = StudentDB.oldID(id_lookup)
+	existMsg=""
+	if (id_exists):
+		student = StudentDB.existingStudent(id_lookup)
+	    self.session['id'] = student.sid
+	    self.session['username'] = student.username
+	    self.session['role'] = 'student'
+
+	    existMsg="Welcome back, " + student.username
+	else:
+	    existMsg="Sorry you are not registered yet"
+	
 	    
+	temp=os.path.join(os.path.dirname(__file__), 'templates/existingmem.html')
+	self.response.headers['Content-Type'] = 'text/html'
+	self.response.out.write(str(template.render(temp,{"emsg":existMsg})))	
+    
+class sNewHandler(webapp.RequestHandler):
+
+  
+  def post(self):
+
+    self.session = Session()
+    
+    que = db.Query(StudentDB)
+    db.delete(que)
+	      
+    sname=self.request.get("sname")
+	id = StudentDB.newID()    
+    self.session['id'] = sid
+	self.session['username'] = sname
+	self.session['role'] = 'student'
+	
+    sclassid=self.request.get('sclassid')
+	    
+    #Create new db for student
+    newDB = StudentDB(username=sname, sid=id, classid=sclassid)
+    newDB.put()
+	     
+    temp=os.path.join(os.path.dirname(__file__), 'templates/logins.html')
+    self.response.headers['Content-Type'] = 'text/html'
+    self.response.out.write(str(template.render(temp,{"sid":sid, "sid_msg":"Your userID is:  ", "sclassid_msg":"Your class id is:  ", "sclassid":sclassid})))	
+	
+
 class LogoutHandler(webapp.RequestHandler):
     
     def get(self):
