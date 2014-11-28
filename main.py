@@ -3,11 +3,11 @@ import random
 import os
 import wsgiref.handlers
 from google.appengine.ext import webapp
-#from google.appengine.ext.webapp import util
+from google.appengine.ext.webapp import util
 from google.appengine.ext.webapp import template
 from google.appengine.ext import db
 from util.sessions import Session
-import json
+#import json
 from random import randint
 
 
@@ -16,6 +16,7 @@ class TeacherDB(db.Model):
     teacher_id=db.StringProperty
     teacher_class_id=db.StringProperty
 	
+
 class StudentDB(db.Model):
 	student_name = db.StringProperty()
 	student_id = db.StringProperty()
@@ -28,28 +29,8 @@ class StudentDB(db.Model):
 	level_5 = db.BooleanProperty(default=False)
 	attempt = db.IntegerProperty(default=0)
 	last_login = db.DateTimeProperty(auto_now=True)
-	'''
-	@classmethod
-	def newID(cls):
-		num = random.randint(10000,99999)
-		sid = 'S%s' % num
-		studentprof = StudentDB.get_by_id(sid)
-		while studentprof:
-			num = random.randint(10000,99999)
-			sid = 'S%s' % num
-			studentprof = StudentDB.get_by_id(sid)
-		return sid
-	@classmethod
-	def oldID(cls, id_num):
-		studentprof = StudentDB.get_by_id(id_num)
-		if studentprof:
-			return True
-		else:
-			return False
-	@classmethod
-	def existingStudent(cls, id_num):
-		return StudentDB.get_by_id(id_num)
-	'''
+
+
 class ExistingHandler(webapp.RequestHandler):
     
     def post(self):
@@ -97,7 +78,9 @@ class ExistingHandler(webapp.RequestHandler):
 	
 	self.response.headers['Content-Type'] = 'text/html'
 	self.response.out.write(str(template.render(temp,{"emsg":role})))
-  
+
+
+
 class tNewHandler(webapp.RequestHandler):
 
   
@@ -201,18 +184,9 @@ class LoginHandler(webapp.RequestHandler):
 	
     self.response.headers['Content-Type'] = 'text/html'
     self.response.out.write(str(template.render(temp,{})))
+    
+    
 	
-    '''
-    self.session['username'] = acct
-    temp = os.path.join(os.path.dirname(__file__), 'setting/game_control.html')
-    self.response.headers['Content-Type'] = 'text/html'
-    self.response.out.write(str(template.render(temp, {'username':acct})))
-    
-    
-    temp = os.path.join(os.path.dirname(__file__), 'login/login.html')
-    self.response.headers['Content-Type'] = 'text/html'
-    self.response.out.write(str(template.render(temp, {'error':"Error! Please type a correct ID and a password!"})))
-    '''
 class MainHandler(webapp.RequestHandler):
     def get (self):
 
@@ -222,6 +196,7 @@ class MainHandler(webapp.RequestHandler):
       
 	loggedUser=""
 	greeting=""
+	
 	if (self.session.get('username')):
 		greeting="Welcome, "
 		loggedUser = self.session.get('username')
@@ -243,11 +218,12 @@ class MainHandler(webapp.RequestHandler):
 	    self.response.out.write(str(template.render(temp,{'loggedUser':loggedUser, "greeting":greeting})))
 	 
 	else:
-	    
+	   
 	    temp = os.path.join(os.path.dirname(__file__), 'templates/main.html')
 	    self.response.headers['Content-Type'] = 'text/html'
 	    self.response.out.write(str(template.render(temp,{'loggedUser':loggedUser, "greeting":greeting})))
-      
+
+    
 class SmainHandler(webapp.RequestHandler):
    
     def get(self):
@@ -289,6 +265,7 @@ class TmainHandler(webapp.RequestHandler):
 	temp = os.path.join(os.path.dirname(__file__), 'templates/tcontrol.html')
 	self.response.headers['Content-Type'] = 'text/html'
 	self.response.out.write(str(template.render(temp,{'loggedUser':logged_name, "greeting":greeting, 'msg':msg, 'classid': tclassid, "list":list})))
+
 	
 class GameHandler(webapp.RequestHandler):
     
@@ -417,7 +394,8 @@ class GameHandler(webapp.RequestHandler):
 	self.response.out.write(str(template.render(temp,{"username":username, 'error_msg': error_msg, 'msg':msg, "level":level+" / 5", "solved":solved})))
 	
 def main ():
-  application = webapp.WSGIApplication ([('/smain', SmainHandler),
+  application = webapp.WSGIApplication ([
+					('/smain', SmainHandler),
 					('/game', GameHandler),
 					('/logout', LogoutHandler),
 					('/tnew', tNewHandler),
@@ -426,6 +404,7 @@ def main ():
 					('/existing', ExistingHandler),
 					('/tmain', TmainHandler),
 					('/.*', MainHandler)], debug=True)
+					
   wsgiref.handlers.CGIHandler().run(application)
 
 if __name__ == '__main__':
