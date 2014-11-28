@@ -20,7 +20,7 @@ class StudentDB(db.Model):
 	student_name = db.StringProperty()
 	student_id = db.StringProperty()
 	gameid = db.IntegerProperty()
-	classid = db.IntegerProperty()
+	classid = db.StringProperty()
 	level_1 = db.BooleanProperty(default=False)
 	level_2 = db.BooleanProperty(default=False)
 	level_3 = db.BooleanProperty(default=False)
@@ -61,8 +61,8 @@ class ExistingHandler(webapp.RequestHandler):
 	
 	if (role == "student"):
 	    temp=os.path.join(os.path.dirname(__file__), 'templates/studentmain.html')
-	    #sid_lookup=StudentDB.gql("WHERE student_id=" + id_lookup)
-	    #sid=sid_lookup.student_id
+	    #lookup=StudentDB.gql("WHERE student_id=" + id_lookup)
+	    #sid_lookup=lookup.get()
 	    #sName = sid_lookup.student_name
 	    #sClass = sid_lookup.classid
     
@@ -271,6 +271,25 @@ class SmainHandler(webapp.RequestHandler):
 	    self.response.headers['Content-Type'] = 'text/html'
 	    self.response.out.write(str(template.render(temp,{})))
 	    
+class TmainHandler(webapp.RequestHandler):
+    def get(self):
+	self.session=Session()
+	logged_name=self.session.get("username")
+	logged_id=self.session.get("id")
+	greeting="Hello"
+	
+	#tdbLookup=TeachertDB.gql("WHERE teacher_id=" + logged_id)
+	#dblookup=tdbLookup.get()
+	#tclassid = sid_lookup.classid
+	 
+	tclassid="2"
+	msg="Class ID: "
+	
+	list=[1,2,3]
+	temp = os.path.join(os.path.dirname(__file__), 'templates/tcontrol.html')
+	self.response.headers['Content-Type'] = 'text/html'
+	self.response.out.write(str(template.render(temp,{'loggedUser':logged_name, "greeting":greeting, 'msg':msg, 'classid': tclassid, "list":list})))
+	
 class GameHandler(webapp.RequestHandler):
     
     
@@ -405,6 +424,7 @@ def main ():
 					('/snew', sNewHandler),
 					('/login', LoginHandler),
 					('/existing', ExistingHandler),
+					('/tmain', TmainHandler),
 					('/.*', MainHandler)], debug=True)
   wsgiref.handlers.CGIHandler().run(application)
 

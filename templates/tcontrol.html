@@ -3,6 +3,7 @@
         <title>CipherSleuth</title>
         <link href="/static/main.css" rel="stylesheet" type="text/css">
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <link href='http://fonts.googleapis.com/css?family=Special+Elite|Coming+Soon' rel='stylesheet' type='text/css'>
     <script language='Javascript' type="text/javascript">
             
             var ajaxVariable = false;
@@ -71,23 +72,35 @@
         
         <div id="wrapper">
         <div id="header">
-            <center><h1 id='title'><a href="main.html" class="head">Cipher Sleuth </a></h1></center>
+            <center>
+            <h1 id='title'><a href="main.html" class="head"><span style="font-size:0.8em">Cipher Sleuth: Teacher</span></a></h1>
+            </center>
         </div>
-        <div id="content">
-            <div id="frame">
-            <div id="inner">
-            <form method="POST" action="/snew" accept-charset="utf-8">
-            <span style="color:white;" class='lookupid'>Please type your name:</span> <input type="text" name="sname"><br /><br />
-            <span style="color:white;" class='lookupid'>Please type class id number:</span> <input type="text" name="sclassid"><br /><br />
-            <input type="submit" value="GET STUDENT USER ID" name="studentid"><br /><br />
-            </form>
-            <span style="color:white;" class='lookupid'><h2>{{ sid_msg }}{{ sid }}</h2></span><br />
-            <span style="color:white;" class='lookupid'><h2>{{ sclassid_msg }}{{ sclassid }}</h2></span>
-            </div>
-           
             
-            </div>
-            </div>
+            
+        
+        
+        <div id="content">
+            <!--<center><h2>Please press <a href="/game">HERE</a> to play a game</h2></center>-->
+                <div id="frame">
+                <h3 id="loggineduser">{{ greeting }}<span style="color:white;" class='lookupid'>TeacherID: </span><a href="/logout" id='loged'><span style="color:white; text-decoration:underline" class='lookupid'>{{ loggedUser }}</a></span></h3>
+                <br />
+                <div id='teacher_display'>
+                    
+                    <table>
+                        <tr>
+                            <td><a href="/tmain?classid={{ classid }}"><span class='tfont'>{{msg}}{{ classid }}</span></a></td>
+                        </tr>
+                        {%}
+                    </table>
+                    <table>
+                       
+                    </table>
+                    
+                    
+                </div>
+                </div>
+        </div>
         </div>
         
     </body>
