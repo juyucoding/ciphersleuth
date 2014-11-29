@@ -12,9 +12,9 @@ from random import randint
 
 
 class TeacherDB(db.Model):
-    teacher_name = db.StringProperty
-    teacher_id=db.StringProperty
-    teacher_class_id=db.StringProperty
+    teacher_name = db.StringProperty()
+    teacher_id=db.StringProperty()
+    teacher_class_id=db.StringProperty()
 	
 
 class StudentDB(db.Model):
@@ -42,15 +42,16 @@ class ExistingHandler(webapp.RequestHandler):
 	
 	if (role == "student"):
 	    temp=os.path.join(os.path.dirname(__file__), 'templates/studentmain.html')
-	    #lookup=StudentDB.gql("WHERE student_id=" + id_lookup)
-	    #sid_lookup=lookup.get()
-	    #sName = sid_lookup.student_name
-	    #sClass = sid_lookup.classid
+	    #lookup=StudentDB.gql("WHERE student_id = :1",id_lookup)
+	    lookup=(db.GqlQuery("SELECT * FROM StudentDB WHERE student_id = :1", id_lookup)).get()
+	    sName = lookup.student_name
+	    sClass = lookup.classid
     
-	    sName=id_lookup
+	    sid=id_lookup
+	    #sName=id_lookup
 	    existMsg=""
 	    if (sName):
-		#self.session['id'] = sid
+		self.session['id'] = sid
 		self.session['username'] = sName
 		self.session['role'] = 'student'
 
@@ -60,14 +61,14 @@ class ExistingHandler(webapp.RequestHandler):
 	    
 	elif (role == "teacher"):
 	    temp=os.path.join(os.path.dirname(__file__), 'templates/teachermain.html')
-	    #tid_lookup=TeacherDB.gql("WHERE teacher_id=" + id_lookup)
-	    #tName = tid_lookup.teacher_name
+	    lookup=(db.GqlQuery("SELECT * FROM TeacherDB WHERE teacher_id = :1", id_lookup)).get()
+	    tName = lookup.teacher_name
+	    tClass = lookup.teacher_class_id
     
-	    tName=id_lookup
-	    
+	    tid=id_lookup
 	    existMsg=""
 	    if (tName):
-		#self.session['id'] = tid
+		self.session['id'] = tid
 		self.session['username'] = tName
 		self.session['role'] = 'teacher'
 
@@ -87,10 +88,7 @@ class tNewHandler(webapp.RequestHandler):
   def post(self):
 
     self.session = Session()
-    
-    que = db.Query(TeacherDB)
-    db.delete(que)
-	      
+      
     tname=self.request.get("tname")
 	    
     if (self.request.get("teacherid")):
@@ -117,8 +115,8 @@ class sNewHandler(webapp.RequestHandler):
 
     self.session = Session()
     
-    que = db.Query(StudentDB)
-    db.delete(que)
+    #que = db.Query(StudentDB)
+    #db.delete(que)
 	      
     sname=self.request.get("sname")
     sid=sname+str(randint(10000,99999))
@@ -129,7 +127,7 @@ class sNewHandler(webapp.RequestHandler):
     sclassid=self.request.get('sclassid')
 	    
     #Create new db for student
-    newDB = StudentDB(username=sname, sid=sid, classid=sclassid)
+    newDB = StudentDB(student_name=sname, student_id=sid, classid=sclassid)
     newDB.put()
 	     
     temp=os.path.join(os.path.dirname(__file__), 'templates/logins.html')
@@ -282,39 +280,30 @@ class GameHandler(webapp.RequestHandler):
 	currentlevel=self.session.get('userCheck')
 	
 	if (level=='1'):
-	    self.session.delete_item("userCheck")
+	    self.session.delete_item('userCheck')
 	    self.session['userCheck']=1
-	    currentlevel=self.session.get('userCheck')
 	    temp = os.path.join(os.path.dirname(__file__), 'templates/game1.html')
 	
 	elif (level=='2'):
-	    currentlevel=self.session.get("userCheck")
-	    if (currentlevel <= 1):
-		errormsg="You are not allowed to the page!"
-		temp = os.path.join(os.path.dirname(__file__), 'templates/game' + str(currentlevel)+'.html')
-	    else:
-		self.session.delete_item("userCheck")
-		self.session['userCheck']=2
-		currentlevel=self.session.get('userCheck')
-		temp = os.path.join(os.path.dirname(__file__), 'templates/game2.html')
+	    self.session.delete_item('userCheck')
+	    self.session['userCheck']=2
+	    temp = os.path.join(os.path.dirname(__file__), 'templates/game2.html')
 		
 	elif (level=='3'):
-	    currentlevel=self.session.get("userCheck")
-	    if (currentlevel <= 2):
-		errormsg="You are not allowed to the page!"
-		temp = os.path.join(os.path.dirname(__file__), 'templates/game' + str(currentlevel)+'.html')
-	    else:
-		self.session.delete_item("userCheck")
-		self.session['userCheck']=2
-		currentlevel=self.session.get('userCheck')
-		temp = os.path.join(os.path.dirname(__file__), 'templates/game3.html')    
+	    self.session.delete_item('userCheck')
+	    self.session['userCheck']=3
+	    temp = os.path.join(os.path.dirname(__file__), 'templates/game3.html')
 	    
 	elif (level=='4'):
+	    self.session.delete_item('userCheck')
 	    self.session['userCheck']=4
 	    temp = os.path.join(os.path.dirname(__file__), 'templates/game4.html')
+	    
 	elif (level=='5'):
+	    self.session.delete_item('userCheck')
 	    self.session['userCheck']=5
 	    temp = os.path.join(os.path.dirname(__file__), 'templates/game5.html')
+	    
 	elif (level=='0'):
 	    self.session['userCheck']=0
 	    temp = os.path.join(os.path.dirname(__file__), 'templates/game0.html')
@@ -322,7 +311,7 @@ class GameHandler(webapp.RequestHandler):
 	    temp = os.path.join(os.path.dirname(__file__), 'templates/gameterm.html')
 	    
 	self.response.headers['Content-Type'] = 'text/html'
-	self.response.out.write(str(template.render(temp,{"username":username, "level":level+" / 5", "error_msg":currentlevel})))
+	self.response.out.write(str(template.render(temp,{"username":username, "level":level+" / 5", "error_msg":self.session['userCheck']})))
     
     def post(self):
 	self.session=Session() 
@@ -340,6 +329,10 @@ class GameHandler(webapp.RequestHandler):
 	    
 	    temp = os.path.join(os.path.dirname(__file__), 'templates/game1.html')
 	    if(decoded=='apple'):
+		que = db.Query(StudentDB)
+		db.delete(que)
+		newDB = StudentDB(level_1=True)
+		newDB.put()
 		msg="CONTINUE"
 		solved=1
 		flag=False
@@ -348,6 +341,10 @@ class GameHandler(webapp.RequestHandler):
 	
 	    temp = os.path.join(os.path.dirname(__file__), 'templates/game2.html')
 	    if(decoded=='banana'):
+		que = db.Query(StudentDB)
+		db.delete(que)
+		newDB = StudentDB(level_2=True)
+		newDB.put()
 		flag=False
 		solved=1
 		msg="CONTINUE"	
@@ -356,6 +353,10 @@ class GameHandler(webapp.RequestHandler):
 	    
 	    temp = os.path.join(os.path.dirname(__file__), 'templates/game3.html')
 	    if(decoded=='kiwi'):
+		que = db.Query(StudentDB)
+		db.delete(que)
+		newDB = StudentDB(level_3=True)
+		newDB.put()
 		flag=False
 		solved=1
 		msg="CONTINUE"	
@@ -364,6 +365,10 @@ class GameHandler(webapp.RequestHandler):
 	    
 	    temp = os.path.join(os.path.dirname(__file__), 'templates/game4.html')
 	    if(decoded=='tomato'):
+		que = db.Query(StudentDB)
+		db.delete(que)
+		newDB = StudentDB(level_4=True)
+		newDB.put()
 		flag=False
 		solved=1
 		msg="CONTINUE"
@@ -372,6 +377,10 @@ class GameHandler(webapp.RequestHandler):
 	    
 	    temp = os.path.join(os.path.dirname(__file__), 'templates/game5.html')
 	    if(decoded=='pineapple'):
+		que = db.Query(StudentDB)
+		db.delete(que)
+		newDB = StudentDB(level_5=True)
+		newDB.put()
 		flag=False
 		solved=1
 		msg="CONTINUE"	
@@ -392,9 +401,26 @@ class GameHandler(webapp.RequestHandler):
 	
 	self.response.headers['Content-Type'] = 'text/html'
 	self.response.out.write(str(template.render(temp,{"username":username, 'error_msg': error_msg, 'msg':msg, "level":level+" / 5", "solved":solved})))
+
+class SavingHandler(webapp.RequestHandler):
+    def get(self):
+	self.session=Session()
+	level=self.session.get("userCheck")
+	username=self.session.get("username")
+	    
+	#Create new db for student
+	newDB = StudentDB(attempt=level)
+	newDB.put()
+	level=str(level)
+	addr="game" + level
+	msg="Your game is saved"
+	temp=os.path.join(os.path.dirname(__file__), 'templates/'+addr +'.html')
+	self.response.headers['Content-Type'] = 'text/html'
+	self.response.out.write(str(template.render(temp,{"username":username,'msg':msg, "level":level+" / 5"})))
+	
 	
 def main ():
-  application = webapp.WSGIApplication ([
+  application = webapp.WSGIApplication ([('/saving', SavingHandler),
 					('/smain', SmainHandler),
 					('/game', GameHandler),
 					('/logout', LogoutHandler),

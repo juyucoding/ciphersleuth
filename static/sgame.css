@@ -140,4 +140,19 @@ a{
     background-color:black;
     color:white;
 }
+#saving{
+    color:white;
+    margin-left:20px;
+    border: 3px solid green;
+    padding:3px;
+    font-family: 'Audiowide';
+    background-color:gray;
+}
+#saving a{
+    color:white;
+}
+#saving a:hover{
+    background-color:green;
+    color:black;
+}
 
