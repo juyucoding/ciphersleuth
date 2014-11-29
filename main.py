@@ -11,6 +11,7 @@ from util.sessions import Session
 from random import randint
 
 
+
 class TeacherDB(db.Model):
     teacher_name = db.StringProperty()
     teacher_id=db.StringProperty()
@@ -111,7 +112,7 @@ class tNewHandler(webapp.RequestHandler):
 	     
     temp=os.path.join(os.path.dirname(__file__), 'templates/logint.html')
     self.response.headers['Content-Type'] = 'text/html'
-    self.response.out.write(str(template.render(temp,{"tid":tid, "tid_msg":"Your userID is:  ", "tclassid_msg":"Your class id is:  ", "tclassid":tclassid})))
+    self.response.out.write(str(template.render(temp,{"tid":tid, "tid_msg":"UserID is:  ", "tclassid_msg":"Class id is:  ", "tclassid":tclassid})))
     
 
 class sNewHandler(webapp.RequestHandler):
@@ -138,9 +139,24 @@ class sNewHandler(webapp.RequestHandler):
 	     
     temp=os.path.join(os.path.dirname(__file__), 'templates/logins.html')
     self.response.headers['Content-Type'] = 'text/html'
-    self.response.out.write(str(template.render(temp,{"sid":sid, "sid_msg":"Your userID is:  ", "sclassid_msg":"Your class id is:  ", "sclassid":sclassid})))	
+    self.response.out.write(str(template.render(temp,{"sid":sid, "sid_msg":"UserID is:  ", "sclassid_msg":"Class id is:  ", "sclassid":sclassid})))	
 	
-
+class ExitHandler(webapp.RequestHandler):
+    def get(self):
+	self.session=Session()
+	self.session.delete_item('username')
+	self.session.delete_item('role')
+	self.session.delete_item('tid')
+	self.session.delete_item('level')
+	self.session.delete_item('game_id')
+	
+	msg="Thank you for playing. Bye!"
+	
+	temp = os.path.join(os.path.dirname(__file__), 'templates/logout.html')
+	
+      	self.response.headers['Content-Type'] = 'text/html'
+        self.response.out.write(str(template.render(temp,{"logoutmsg":msg})))
+	
 class LogoutHandler(webapp.RequestHandler):
     
     def get(self):
@@ -150,6 +166,8 @@ class LogoutHandler(webapp.RequestHandler):
 	self.session.delete_item('username')
 	self.session.delete_item('role')
 	self.session.delete_item('tid')
+	self.session.delete_item('level')
+	self.session.delete_item('game_id')
 	
 	logoutmsg="You are now logged out"
 	
@@ -167,14 +185,19 @@ class LoginHandler(webapp.RequestHandler):
     
 	if existing == '1':
 	    temp=os.path.join(os.path.dirname(__file__), 'templates/existingcheck.html')
-	else:
+	elif existing == '0':
 	    temp=os.path.join(os.path.dirname(__file__), 'templates/newmem.html')
 
-		
+     
+	role=self.request.get("role")
+	if (role=='1'):
+	    temp=os.path.join(os.path.dirname(__file__), 'templates/logint.html')
+	elif(role=='2'):
+	    temp=temp=os.path.join(os.path.dirname(__file__), 'templates/logins.html')
+	
 	self.response.headers['Content-Type'] = 'text/html'
 	self.response.out.write(str(template.render(temp,{})))
-     
-    
+	    
   def post(self):
     
     #self.session = Session()
@@ -236,12 +259,15 @@ class SmainHandler(webapp.RequestHandler):
 	userid=self.session.get("id")
 	username = self.session.get("username")
 	operation = self.request.get("op")
-	
+	error_msg=""
+	goback=""
 	#control
 	if(operation=='0'):
+	    result=(db.GqlQuery("SELECT * FROM GameDB WHERE student_id = :1", userid)).fetch(limit=100)
+	    
 	    temp = os.path.join(os.path.dirname(__file__), 'templates/scontrol.html')
 	    self.response.headers['Content-Type'] = 'text/html'
-	    self.response.out.write(str(template.render(temp,{})))
+	    self.response.out.write(str(template.render(temp,{"loggedUser":username, "result":result})))
 	#start a new game
 	elif(operation=='1'):
 	    temp = os.path.join(os.path.dirname(__file__), 'templates/sgameintro.html')
@@ -252,9 +278,11 @@ class SmainHandler(webapp.RequestHandler):
 	    temp = os.path.join(os.path.dirname(__file__), 'templates/gameload.html')
 	    
 	    result=(db.GqlQuery("SELECT * FROM GameDB WHERE student_id = :1", userid)).fetch(limit=100)
-	    
+	    if (len(result) == 0):
+		error_msg="Error! No saved game!"
+		goback="Back to Main"
 	    self.response.headers['Content-Type'] = 'text/html'
-	    self.response.out.write(str(template.render(temp,{"greeting": greeting, "username":username, "result":result})))
+	    self.response.out.write(str(template.render(temp,{"greeting": greeting, "username":userid, "result":result,"error_msg":error_msg, "goback":goback})))
     	else:
 	    temp = os.path.join(os.path.dirname(__file__), 'templates/main.html')
 	    self.response.headers['Content-Type'] = 'text/html'
@@ -334,7 +362,7 @@ class GameHandler(webapp.RequestHandler):
 	    self.session['userCheck']=1
 	    temp = os.path.join(os.path.dirname(__file__), 'templates/game1.html')
 	    
-	    level=int(level)
+	    current_level=int(level)
 	    #create a new gamedb for the user
 	    if (self.session.get('game_id')):
 		gameid=self.session.get('gid')
@@ -342,7 +370,7 @@ class GameHandler(webapp.RequestHandler):
 		gameid=userid + "_" + str(randint(1,99999))
 		self.session['game_id']=gameid
 		
-	    newDB = GameDB(student_id=userid, game_id=gameid,current_level=level)
+	    newDB = GameDB(student_id=userid, game_id=gameid,current_level=current_level)
 	    newDB.put()
 	    
 	    #update StudentDB with the new gameid
@@ -360,60 +388,61 @@ class GameHandler(webapp.RequestHandler):
 	    self.session.delete_item('userCheck')
 	    self.session['userCheck']=2
 	    temp = os.path.join(os.path.dirname(__file__), 'templates/game2.html')
-	    level=int(level)
+	    current_level=int(level)
 	    gameid=self.session.get("game_id")
 	    result_game=(db.GqlQuery("SELECT * FROM GameDB WHERE game_id = :1", gameid)).get()
 	    
 	    #update game DB with current level
-	    result_game.current_level=level
+	    result_game.current_level=current_level
 	    result_game.put()
 	    
 	    #update student DB with current level
-	    result_student.attempt=level
-	    result_student.put()	
+	    result_student.attempt=current_level
+	    result_student.put()
+	    
 	elif (level=='3'):
 	    self.session.delete_item('userCheck')
 	    self.session['userCheck']=3
 	    temp = os.path.join(os.path.dirname(__file__), 'templates/game3.html')
-	    level=int(level)
+	    current_level=int(level)
 	    
 	    gameid=self.session.get("game_id")
 	    result_game=(db.GqlQuery("SELECT * FROM GameDB WHERE game_id = :1", gameid)).get()
-	    result_game.current_level=level
+	    result_game.current_level=current_level
 	    result_game.put()
 	    
 	    #update student DB with current level
-	    result_student.attempt=level
+	    result_student.attempt=current_level
 	    result_student.put()	
 	elif (level=='4'):
 	    self.session.delete_item('userCheck')
 	    self.session['userCheck']=4
 	    temp = os.path.join(os.path.dirname(__file__), 'templates/game4.html')
-	    level=int(level)
+	    current_level=int(level)
 	    
 	    gameid=self.session.get("game_id")
 	    result_game=(db.GqlQuery("SELECT * FROM GameDB WHERE game_id = :1", gameid)).get()
 	    
-	    result_game.current_level=level
+	    result_game.current_level=current_level
 	    result_game.put()
 	    
 	    #update student DB with current level
-	    result_student.attempt=level
+	    result_student.attempt=current_level
 	    result_student.put()	
 	elif (level=='5'):
 	    self.session.delete_item('userCheck')
 	    self.session['userCheck']=5
 	    temp = os.path.join(os.path.dirname(__file__), 'templates/game5.html')
-	    level=int(level)
+	    current_level=int(level)
 	    
 	    gameid=self.session.get("game_id")
 	    result_game=(db.GqlQuery("SELECT * FROM GameDB WHERE game_id = :1", gameid)).get()
 	    
-	    result_game.current_level=level
+	    result_game.current_level=current_level
 	    result_game.put()
 	    
 	    #update student DB with current level
-	    result_student.attempt=level
+	    result_student.attempt=current_level
 	    result_student.put()	
 	elif (level=='0'):
 	    self.session['userCheck']=0
@@ -429,7 +458,7 @@ class GameHandler(webapp.RequestHandler):
 	    temp = os.path.join(os.path.dirname(__file__), 'templates/gameterm.html')
 	    
 	self.response.headers['Content-Type'] = 'text/html'
-	self.response.out.write(str(template.render(temp,{"username":username, "level":str(level)+" / 5", "error_msg":self.session['userCheck']})))
+	self.response.out.write(str(template.render(temp,{"username":username, "level":level+" / 5", "error_msg":errormsg})))
     
     def post(self):
 	self.session=Session()
@@ -445,10 +474,11 @@ class GameHandler(webapp.RequestHandler):
 	
 	result=(db.GqlQuery("SELECT * FROM StudentDB WHERE student_id = :1", userid)).get()
 	
+	decoded=decoded.upper()
 	if (operation=='11'):
 	    
 	    temp = os.path.join(os.path.dirname(__file__), 'templates/game1.html')
-	    if(decoded=='apple'):	
+	    if(decoded=='GO TO LIBRARY'):	
 		result.level_1=True
 		msg="CONTINUE"
 		solved=1
@@ -457,7 +487,7 @@ class GameHandler(webapp.RequestHandler):
 	elif (operation=='12'):
 	
 	    temp = os.path.join(os.path.dirname(__file__), 'templates/game2.html')
-	    if(decoded=='banana'):
+	    if(decoded=='GET MYSTERY OF TIME AND GO TO AIRPORT'):
 		result.level_2=True
 		flag=False
 		solved=1
@@ -466,7 +496,7 @@ class GameHandler(webapp.RequestHandler):
 	elif (operation=='13'):
 	    
 	    temp = os.path.join(os.path.dirname(__file__), 'templates/game3.html')
-	    if(decoded=='kiwi'):
+	    if(decoded=='HE HAS BROWN HAIR, RED SCARF, YELLOW SHOES'):
 		result.level_3=True
 		flag=False
 		solved=1
@@ -475,7 +505,7 @@ class GameHandler(webapp.RequestHandler):
 	elif (operation=='14'):
 	    
 	    temp = os.path.join(os.path.dirname(__file__), 'templates/game4.html')
-	    if(decoded=='tomato'):
+	    if(decoded=='I LOVE YELLOW AND SKY IS PURPLE'):
 		result.level_4=True
 		flag=False
 		solved=1
@@ -484,7 +514,7 @@ class GameHandler(webapp.RequestHandler):
 	elif (operation=='15'):
 	    
 	    temp = os.path.join(os.path.dirname(__file__), 'templates/game5.html')
-	    if(decoded=='pineapple'):
+	    if(decoded=='GO TO GRANDMA HOUSE CODE IS 42'):
 		result.level_5=True
 		flag=False
 		solved=1
@@ -540,6 +570,7 @@ def main ():
 					('/login', LoginHandler),
 					('/existing', ExistingHandler),
 					('/tmain', TmainHandler),
+					('/exiting', ExitHandler),
 					('/.*', MainHandler)], debug=True)
 					
   wsgiref.handlers.CGIHandler().run(application)

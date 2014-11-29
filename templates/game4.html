@@ -68,13 +68,13 @@
     
     </head>
     
-    <body style="background-image:url('/image/hackimg2.jpg'); background-size:cover;">
+    <body style="background-image:url('/image/mysteryperson.png'); background-size:cover;">
         
         <div id="wrapper">
         <div id="header">
             <h1 id='title' class='group'><a href="main.html" class="head">Cipher Sleuth </a></h1>
         </div>
-        <h1 id='username' class='group'>Current user: {{username}} | Current level: {{ level }} | <span id="saving"><a href="/saving">SAVE</a></span></h1>    
+        <h1 id='username' class='group'>Current user: {{username}} | Current level: {{ level }} | <span id="saving"><a href="/saving">SAVE</a></span> | <span id="exiting"><a href="/exiting">EXIT</a></span></h1></h1>    
         <br /> 
         
         <div id="gcontent">
@@ -98,8 +98,10 @@
                         <p>By this time you read this letter you will be at the airport. Before searching for the person, you need to decode this message for a proper communication.</p>
                         <p>Since the mission is highly sensitive, we have a secret code to greet each other. If you found the person and just said 'hi', then you will be just ignored.</p>
                         <p>The greeting might sounds strange, but you will need to say it.</p>
-                        <p>{instruction goes here}</p>
-                        <p>Encoded msg: I LOVE YELLO AND SKY IS PURPLE</p>
+                        <p class='decode'>Decode message below: </p>
+                        <p class='decode'>Key: TARDIS</p>
+                        <p class='decode'>Encoded msg:</p>
+                        <p class='decode'>B LFYM QXLCRE SGD JNG AL PLUXDX</p>
                         
                         <p>I wish your best luck!</p>
                         

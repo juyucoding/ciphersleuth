@@ -82,6 +82,6 @@ a{
     font-family: 'Shadows Into Light Two', cursive;
     color:white
 }
-.tr{
-    border-bottom: 1px solid white;
+#role a:hove{
+    text-decoration: underline;
 }

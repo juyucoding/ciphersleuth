@@ -1,7 +1,7 @@
 <html>
     <head>
         <title>CipherSleuth</title>
-        <link href="/static/sgame.css" rel="stylesheet" type="text/css">
+        <link href="/static/main.css" rel="stylesheet" type="text/css">
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <link href='http://fonts.googleapis.com/css?family=Special+Elite|Coming+Soon' rel='stylesheet' type='text/css'>
     <script language='Javascript' type="text/javascript">
@@ -68,54 +68,34 @@
     
     </head>
     
-    <body style="background-image:url('/image/library.png'); background-size: contain;">
+    <body style="background-color:black;">
         
         <div id="wrapper">
         <div id="header">
-            <h1 id='title' class='group'><a href="main.html" class="head">Cipher Sleuth </a></h1>
+            <center>
+            <h1 id='title'><a href="main.html" class="head"><span style="font-size:0.5em">Cipher Sleuth</span></a></h1>
+            </center>
         </div>
-        <h1 id='username' class='group'>Current user: {{username}} | Current level: {{ level }} | <span id="saving"><a href="/saving">SAVE</a></span> | <span id="exiting"><a href="/exiting">EXIT</a></span></h1></h1>    
-        <br /> 
+            
+            
         
-        <div id="gcontent">
+        
+        <div id="content">
             <!--<center><h2>Please press <a href="/game">HERE</a> to play a game</h2></center>-->
-            <div id='decoded'>
-                
-                <form method='post' action="/game?op=12"><center>
-                    {%ifequal solved None %}
-                    <span id='decoded_msg'>Decoded message: <input type="text" name='decodedmsg' size=100;></span><input type="submit" VALUE="SUBMIT">
-                    {%endifequal%}
-                </center>
-                </form>
-            </div>
-            <div id='msg_box'>
-                <center><h2 id='error_text'>{{ error_msg }}</h2>
-                <h2 id='msg_text'><a href="/game?level=3">{{ msg }}</a></h2></center>
-            </div>
-                <div id="ginterface">
-                    <div id="letter">
-                        <div id="instruction">
-                        <p>Dear, {{ username }}</p>
-                        <p>Hi, great job on decoding the message! By the time you recieve the letter, you probably just solved it or less. Now, with the decoded message I have
-                        another mission for you.</p>
-                        <p>This will tell you what to get and where to go next. The item will be very useful when you do the final mission. <i>[Hint: This book is wirtten by your grandmother/]</i></p>
-                        
-                        <p class='decode'>Decode message below: </p>
-                        <p class='decode'>Sentence</p>
-                        <p class='decode'>Paul's xylophone didn't zealously integrate bank unity. At five, loony chaos met work, not great. He even ordered quickly stopping terror in Kelly's volumnious rowdy yelling</p>
-                        <p class='decode'>Encoded message:</p>
-                        <p class='decode'>UJS WRQSJOR GB SFWJ PNZ UG SG PFOHGOS</p>
-                        <p>I wish your best luck!</p>
-                        
-                        <p>Sincerely,</p>
-                        <p>Mrs.J</p>
-                        </div>
-                
+                <div id="frame">
+                <h3 id="loggineduser">{{ greeting }}<span style="color:white;" class='lookupid'>Student ID: </span><a href="/logout" id='loged'><span style="color:white; text-decoration:underline" class='lookupid'>{{ loggedUser }}</a></span></h3>
+                <br />
+                <div id='teacher_display'>
+                    
+                <table border=1 cellpadding=4>
+                <tr class='tr'><td class='stable'>Number</td><td class='stable'>Game ID</td><td class='stable'>Current Level</td><td class='stable'>Completion</td><td class='stable'>Last active</td></tr>
+                {% for r in result %}
+                <tr class='tr'><td class='stable'><center>{{forloop.counter}}</center></td><td class='stable'>{{r.game_id}}</td><td class='stable'>{{r.current_level}}</td><td class='stable'>{{r.completion}}</td><td class='stable'>{{r.active_time}}</td></tr>
+                {% endfor %}
+               </table>
+                    
+                <h2><a href="/"><span class='stable'>Go back to Main</span></a></h2>
                 </div>
-                <div id="terminal">
-                    Terminal
-                </div>
-                
                 </div>
         </div>
         </div>
