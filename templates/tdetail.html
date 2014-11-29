@@ -73,7 +73,7 @@
         <div id="wrapper">
         <div id="header">
             <center>
-            <h1 id='title'><a href="main.html" class="head">Cipher Sleuth</a></h1>
+            <h1 id='title'><a href="main.html" class="head"><span style="font-size:0.8em">Cipher Sleuth: Teacher</span></a></h1>
             </center>
         </div>
             
@@ -83,12 +83,29 @@
         <div id="content">
             <!--<center><h2>Please press <a href="/game">HERE</a> to play a game</h2></center>-->
                 <div id="frame">
-                <h3 id="loggineduser"><span style="color:white;" class='lookupid'>{{greeting}}</span><a href="/logout" id='loged'><span style="color:white; text-decoration:underline" class='lookupid'>{{ loggedUser }}</a></span></h3>
+                <h3 id="loggineduser">{{ greeting }}<span style="color:white;" class='lookupid'>TeacherID: </span><a href="/logout" id='loged'><span style="color:white; text-decoration:underline" class='lookupid'>{{ loggedUser }}</a></span></h3>
                 <br />
-                <h3 name='control' class='login'><a href="/smain?op=0">Go to Control panel</a></h3>
-                <h3 name='newgame' class='login'><a href="/smain?op=1">Start a new game</a></h3>
-                <h3 name='loadgame' class='login'><a href="/smain?op=2">Load a game</a></h3>
-                <div id='display'></div>
+                <div id='teacher_display'>
+                
+                {% for r in result %}
+                <p class='stable'>Student Name: {{r.student_name}}</p>
+                <p class='stable'>Student ID: {{r.student_id}}</p>
+                <p class='stable'>Game ID: {{ r.game_id }}</p>
+                <p class='stable'>Class ID: {{ r.classid }}</p>
+                <p class='stable'>Level completion</p>
+                <p class='stable'>Level 1: {{r.level_1}}</p>
+                <p class='stable'>Level 2: {{r.level_2}}</p>
+                <p class='stable'>Level 3: {{r.level_3}}</p>
+                <p class='stable'>Level 4: {{r.level_4}}</p>
+                <p class='stable'>Level 5: {{r.level_5}}</p>
+                <p class='stable'>Current attempt: {{r.attempt}}</p>
+                <p class='stable'>Last active: {{ r.last_login}}</p>
+                {% endfor %}
+                <br />
+                <h3><a href="/tmain"><span class='stable'>Go Back To the List</span></a></h3>
+                    
+                    
+                </div>
                 </div>
         </div>
         </div>

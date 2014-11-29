@@ -68,11 +68,20 @@ a{
     font-size:1.5em;
 }
 .lookupid{
+    color:white;
     font-size:2em;
+    font-family: 'Shadows Into Light Two', cursive;
+}
+.stable{
+    color:white;
+    font-size:1.3em;
     font-family: 'Shadows Into Light Two', cursive;
 }
 .tfont{
     font-size:2em;
     font-family: 'Shadows Into Light Two', cursive;
     color:white
+}
+.tr{
+    border-bottom: 1px solid white;
 }

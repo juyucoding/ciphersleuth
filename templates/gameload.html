@@ -73,7 +73,7 @@
         <div id="wrapper">
         <div id="header">
             <center>
-            <h1 id='title'><a href="main.html" class="head">Cipher Sleuth</a></h1>
+            <h1 id='title'><a href="main.html" class="head"><span style="font-size:0.5em">Cipher Sleuth Game Load</span></a></h1>
             </center>
         </div>
             
@@ -83,12 +83,17 @@
         <div id="content">
             <!--<center><h2>Please press <a href="/game">HERE</a> to play a game</h2></center>-->
                 <div id="frame">
-                <h3 id="loggineduser"><span style="color:white;" class='lookupid'>{{greeting}}</span><a href="/logout" id='loged'><span style="color:white; text-decoration:underline" class='lookupid'>{{ loggedUser }}</a></span></h3>
+                <h3 id="loggineduser"><span style="color:white" class='lookupid'>{{ greeting }}</span><a href="/logout" id='loged'><span style="color:white; text-decoration:underline" class='lookupid'>{{ username }}</a></span></h3>
                 <br />
-                <h3 name='control' class='login'><a href="/smain?op=0">Go to Control panel</a></h3>
-                <h3 name='newgame' class='login'><a href="/smain?op=1">Start a new game</a></h3>
-                <h3 name='loadgame' class='login'><a href="/smain?op=2">Load a game</a></h3>
-                <div id='display'></div>
+                <div id='teacher_display'>
+                
+                {% for r in result %}
+                <p ><a href="/gameload?gid={{r.game_id}}"><span style="color:white" class='lookupid'>Game{{forloop.counter}}</span></a></p>
+                {% endfor %}
+               
+                <h1><a href="/game?level={{level}}"><span style="color: white;"  class='lookupid'>{{start_msg}}</span></a></h1>
+                    
+                </div>
                 </div>
         </div>
         </div>

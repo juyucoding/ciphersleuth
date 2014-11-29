@@ -233,6 +233,7 @@ class SmainHandler(webapp.RequestHandler):
     def get(self):
 	self.session=Session()
 	
+	userid=self.session.get("id")
 	username = self.session.get("username")
 	operation = self.request.get("op")
 	
@@ -246,41 +247,85 @@ class SmainHandler(webapp.RequestHandler):
 	    temp = os.path.join(os.path.dirname(__file__), 'templates/sgameintro.html')
 	    self.response.headers['Content-Type'] = 'text/html'
 	    self.response.out.write(str(template.render(temp,{"username":username})))
-	else:
+	elif(operation=='2'):
+	    greeting="Hello, "
+	    temp = os.path.join(os.path.dirname(__file__), 'templates/gameload.html')
+	    
+	    result=(db.GqlQuery("SELECT * FROM GameDB WHERE student_id = :1", userid)).fetch(limit=100)
+	    
+	    self.response.headers['Content-Type'] = 'text/html'
+	    self.response.out.write(str(template.render(temp,{"greeting": greeting, "username":username, "result":result})))
+    	else:
 	    temp = os.path.join(os.path.dirname(__file__), 'templates/main.html')
 	    self.response.headers['Content-Type'] = 'text/html'
 	    self.response.out.write(str(template.render(temp,{})))
-	    
+
+class DetailHandler(webapp.RequestHandler):
+    def get(self):
+	self.session=Session()
+	logged_id=self.session.get("id")
+	sid=self.request.get("id")
+	result=(db.GqlQuery("SELECT * FROM StudentDB WHERE student_id = :1", sid)).fetch(limit=100)
+	
+	temp = os.path.join(os.path.dirname(__file__), 'templates/tdetail.html')
+	self.response.headers['Content-Type'] = 'text/html'
+	self.response.out.write(str(template.render(temp,{'loggedUser':logged_id, "result":result})))
+	
 class TmainHandler(webapp.RequestHandler):
     def get(self):
 	self.session=Session()
 	logged_name=self.session.get("username")
 	logged_id=self.session.get("id")
 	greeting="Hello"
-	lookup=(db.GqlQuery("SELECT classid FROM TeacherDB WHERE teacher_id = :1", logged_id)).get()
 	
-	 
-	msg="Class ID: "
-	
-	
+	lookup=(db.GqlQuery("SELECT * FROM TeacherDB WHERE teacher_id = :1", logged_id)).get()
+	classid_teacher=lookup.teacher_class_id
+	result=(db.GqlQuery("SELECT * FROM StudentDB WHERE classid = :1", classid_teacher)).fetch(limit=100)
+	 	
 	temp = os.path.join(os.path.dirname(__file__), 'templates/tcontrol.html')
 	self.response.headers['Content-Type'] = 'text/html'
-	self.response.out.write(str(template.render(temp,{'loggedUser':logged_name, "greeting":greeting, 'msg':msg, 'classid': tclassid, "list":list})))
+	self.response.out.write(str(template.render(temp,{'loggedUser':logged_id, "greeting":greeting,"result":result})))
 
+class GameloadHandler(webapp.RequestHandler):
+    
+    def get(self):
+	self.session=Session()
+	start_msg=""	
+	gid=self.request.get("gid")
+	
+	self.session['game_id']=gid
+	#get current level for game id
+	result_game=(db.GqlQuery("SELECT * FROM GameDB WHERE game_id = :1", gid)).get()
+    	glevel=result_game.current_level
+	if (glevel):
+	    start_msg="START THE GAME"
+	#level=self.request.get("level")
+	if (self.session.get('level')):
+	    self.session.delete_item('level')
+	self.session['level']=glevel
+
+	
+	temp = os.path.join(os.path.dirname(__file__), 'templates/gameload.html')
+	self.response.headers['Content-Type'] = 'text/html'
+	self.response.out.write(str(template.render(temp,{"start_msg":start_msg,"level":glevel})))
+	
 	
 class GameHandler(webapp.RequestHandler):
     
     
     def get(self):
 	self.session=Session()
+
 	self.session['userCheck']=0
 	userid=self.session.get("id")
 	username=self.session.get("username")
 	level=self.request.get("level")
+	if (self.session.get('level')):
+	    self.session.delete_item('level')
 	self.session['level']=level
 	final=self.request.get("c")
 	errormsg=""
-	
+    	
 	
 	result_student=(db.GqlQuery("SELECT * FROM StudentDB WHERE student_id = :1", userid)).get()
 	
@@ -291,13 +336,23 @@ class GameHandler(webapp.RequestHandler):
 	    
 	    level=int(level)
 	    #create a new gamedb for the user
-	    gameid=userid + "_" + str(randint(1,99999))
-	    self.session['game_id']=gameid
+	    if (self.session.get('game_id')):
+		gameid=self.session.get('gid')
+	    else:	
+		gameid=userid + "_" + str(randint(1,99999))
+		self.session['game_id']=gameid
+		
 	    newDB = GameDB(student_id=userid, game_id=gameid,current_level=level)
 	    newDB.put()
 	    
 	    #update StudentDB with the new gameid
 	    result_student.game_id=gameid
+	    result_student.attempt=0
+	    result_student.level_1=False
+	    result_student.level_2=False
+	    result_student.level_3=False
+	    result_student.level_4=False
+	    result_student.level_5=False
 	    result_student.put()
 	    
 	    
@@ -474,7 +529,9 @@ class SavingHandler(webapp.RequestHandler):
 	
 	
 def main ():
-  application = webapp.WSGIApplication ([('/saving', SavingHandler),
+  application = webapp.WSGIApplication ([('/tdetail', DetailHandler),
+					('/gameload',GameloadHandler),
+					('/saving', SavingHandler),
 					('/smain', SmainHandler),
 					('/game', GameHandler),
 					('/logout', LogoutHandler),
