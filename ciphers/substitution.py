@@ -2,30 +2,9 @@ import math
 import random
 import os
 import wsgiref.handlers
-#from google.appengine.ext import webapp
-#from google.appengine.ext.webapp import util
-#from google.appengine.ext.webapp import template
-#from google.appengine.ext import db
-#from util.sessions import Session
 import json
-#import cryptomath
 import sys
 
-class CipherToolbox:
-	def __init__(self):
-		#toolbox
-		self.tools = []
-	def getMode(self):
-		while True:
-			print('Do you wish to encrypt or decrypt a message?')
-			mode = raw_input().lower()
-			if mode in 'encrypt e decrypt d'.split():
-				return mode
-			else:
-				print('Enter either "encrypt" or "e" or "decrypt" or "d".')
-	def getMessage(self):
-		print('Enter your message:')
-		return raw_input()
 
 class SubstitutionCipherTool:
 # Simple Substitution Cipher
@@ -74,18 +53,18 @@ class SubstitutionCipherTool:
 				# symbol is not in LETTERS, just add it
 				translated += symbol
 		return translated
-def main():
-	toolbox = CipherToolbox()
-	mod = toolbox.getMode()
-	print(mod)
-	mes = toolbox.getMessage()
-	print(mes)
-	subs = SubstitutionCipherTool(mod,mes)
-	toolbox.tools.append(subs)
-	subs.getKey()
-	print(subs.key)
-	cipher = subs.getTranslatedMessage()
-	print(cipher)
+#def main():
+#	toolbox = CipherToolbox()
+#	mod = toolbox.getMode()
+#	print(mod)
+#	mes = toolbox.getMessage()
+#	print(mes)
+#	subs = SubstitutionCipherTool(mod,mes)
+#	toolbox.tools.append(subs)
+#	subs.getKey()
+#	print(subs.key)
+#	cipher = subs.getTranslatedMessage()
+#	print(cipher)
 	
-if __name__ == '__main__':
-  main()
+#if __name__ == '__main__':
+#  main()
