@@ -25,14 +25,20 @@ class AffineCipherTool:
 				return self.keyA * len(self.SYMBOLS) + self.keyB
 	def getKey(self):
 		while True:
-			print('Enter a new key number')
-			key = int(raw_input())
-			if (key >= 1 and key <= 65534):
-				self.key = key
-				self.keyA, self.keyB = self.getKeyParts(self.key)
-				self.checkKeys(self.keyA, self.keyB, 'encrypt')
-				if self.okay == True:
-					return key
+			print('Would you like a randomly generated key?')
+			ans = raw_input().lower()
+			if ans[0] == 'y':
+				self.key = self.getRandomKey()
+				print(self.key)
+			else:
+				print('Enter the key number')
+				key = int(raw_input())
+				if (key >= 1 and key <= 65534):
+					self.key = key
+					self.keyA, self.keyB = self.getKeyParts(self.key)
+					self.checkKeys(self.keyA, self.keyB, 'encrypt')
+					if self.okay == True:
+						return key
 	def getKeyParts(self, key):
 		self.keyA = key // len(self.SYMBOLS)
 		self.keyB = key % len(self.SYMBOLS)
