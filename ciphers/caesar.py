@@ -15,13 +15,21 @@ class CaesarCipherTool:
 		self.name = 'caesar'
 	MAX_KEY_SIZE = 26
 	key = 0
-	def getKey(self):
-		while True:
-			print('Enter the key number (1-%s)' % (self.MAX_KEY_SIZE))
-			key = int(raw_input())
-			if (key >= 1 and key <= self.MAX_KEY_SIZE):
-				self.key = key
-				return key
+	'''
+	def getKey(self,num):
+		#while True:
+		
+		print('Enter the key number (1-%s)' % (self.MAX_KEY_SIZE))
+		if (key >= 1 and key <= self.MAX_KEY_SIZE):
+			self.key = key
+			return key
+	'''
+	def display(self):
+		return self.mode + " " + self.message + " " + self.key
+
+	def storekey(self,num):
+		self.key=int(num)
+		
 	def getTranslatedMessage(self):
 		if self.mode[0] == 'd':
 			self.key = -self.key

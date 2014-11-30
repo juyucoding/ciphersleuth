@@ -10,6 +10,7 @@ from util.sessions import Session
 import json
 #from django.utils import simplejson as json
 from random import randint
+from ciphers import caesar
 
 
 
@@ -569,7 +570,7 @@ class TerminalHandler(webapp.RequestHandler):
 	self.response.headers['Content-Type'] = 'text/html'
 	self.response.out.write(str(template.render(temp,{"username":username,'msg':msg, "level":level+" / 5", "echo":echo})))
 	
-class SampleHandler(webapp.RequestHandler):
+class CipherInterfaceHandler(webapp.RequestHandler):
     def get(self):
 	temp=os.path.join(os.path.dirname(__file__), 'templates/sample.html')
 	self.response.headers['Content-Type'] = 'text/html'
@@ -597,11 +598,7 @@ class SampleHandler(webapp.RequestHandler):
 		mo="Encryption"
 	    else:
 		mo="Decryption"
-	    txtinput="You have chosen " + mo +" and your message is " + msg
-	
-	    
-	    
-	    
+	    txtinput="You have chosen " + mo +" and your message is " + msg + ". Please select which cipher you would like to use - Caesar cipher(c), Substitution cipher(s), Transposition cipher(t), Vigenere cipher(v), or Affine cipher(a). Please type \"use-cipher method\"(ex - use-s)"
 	
 	array = {'text': txtinput}	    
         
@@ -610,7 +607,39 @@ class SampleHandler(webapp.RequestHandler):
         self.response.headers['Content-Type'] = 'application/json'
         self.response.out.write(json.dumps(array))
 
+class CaesarHandler(webapp.RequestHandler):
+    def post(self):
+	self.session=Session()
+	mode = self.session.get("mode")
+	msg=self.session.get("msg")
+	
+        txtinput = self.request.get('method')
+	
+	if (txtinput=='c'):
+	    txtinput="You have chosen Caesar cipher. Your mode is " + mode +" and your message is " + msg +". Please enter key size(1-26) as key-{key size} (ex key-22)" 
+	elif (txtinput == 'key'):
+	    key=self.request.get("keynum")
+	    caes = caesar.CaesarCipherTool(mode,msg)
+	    #get key
+	    if(int(key) >= 1 and int(key) <= 26):
+		txtinput="Your key is " + key
+		caes.storekey(key)
+		txtinput="Your translated message: " + caes.getTranslatedMessage() + ". Please type tb for toolbox, h for help"
+		
+	    else:
+		txtinput="Your key is not valid it must be in range (1 <= key <= 26). Please try again. key-{key size} (ex key-22)" + key
+	    
+	    
+	array = {'text': txtinput}	    
+        
+       
+        # Output the JSON
+        self.response.headers['Content-Type'] = 'application/json'
+        self.response.out.write(json.dumps(array))
 
+class SubstitutionHandler(webapp.RequestHandler):
+    
+	
 	
 def main ():
   application = webapp.WSGIApplication ([('/tdetail', DetailHandler),
@@ -626,7 +655,9 @@ def main ():
 					('/tmain', TmainHandler),
 					('/exiting', ExitHandler),
 					('/terminal', TerminalHandler),
-					('/sample', SampleHandler),
+					('/cipherInter', CipherInterfaceHandler),
+					('/caesar', CaesarHandler),
+					('/sub', SubstitutionHandler),
 					('/.*', MainHandler)], debug=True)
 					
   wsgiref.handlers.CGIHandler().run(application)

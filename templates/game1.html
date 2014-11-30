@@ -8,20 +8,34 @@
            $(document).ready(function(){
                 // This will run when the item of class 'button' is clicked
                 $(".button").click(function() {
-                   
+                    myurl="/cipherInter";
                     // Grabs the text input
                     var name = $("input#txtValue").val();
                     var dataString = 'txtValue='+ name; 
                     if (name.charAt(0)=='e' || name.charAt(0)=='d'){
                         dataString="mode=" + name.charAt(0) + "&msg=" + name.substring(2);
-                    } 
+                    }
+                    if (name.substring(0,3) =='use'){
+                        method=name.charAt(4);
+                        dataString="method="+name.charAt(4);
+                        if(method=='c'){
+                            myurl="/caesar";
+                        }
+                        else if(method=='s'){
+                            myurl="/sub";
+                        }
+                    }
+                    if (name.substring(0,3) == 'key'){
+                        dataString="method=key&"+"keynum=" + name.substring(4);
+                        myurl="/caesar";
+                    }
         
                     var op=document.getElementById('txtValue').value;
                     // This creates the AJAX connection
                     document.getElementById('txtValue').value='';
                     $.ajax({
                         type: "POST",
-                        url: "/sample",
+                        url: myurl,
                         data: dataString,
                         success: function(data) {
                             
