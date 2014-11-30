@@ -71,7 +71,7 @@ class CipherToolbox:
 		else:
 			print('That is not a valid cipher.')
 			self.getCipher()
-def main():
+def toolboxMenu():
 	while True:
 		toolbox = CipherToolbox()
 		mod = toolbox.getMode()
