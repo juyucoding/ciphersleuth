@@ -10,7 +10,7 @@ from util.sessions import Session
 import json
 #from django.utils import simplejson as json
 from random import randint
-from ciphers import caesar
+from ciphers import caesar, substitution, transposition, vigenere, affine
 
 
 
@@ -616,7 +616,7 @@ class CaesarHandler(webapp.RequestHandler):
         txtinput = self.request.get('method')
 	
 	if (txtinput=='c'):
-	    txtinput="You have chosen Caesar cipher. Your mode is " + mode +" and your message is " + msg +". Please enter key size(1-26) as key-{key size} (ex key-22)" 
+	    txtinput="You have chosen Caesar cipher. Your mode is " + mode +" and your message is " + msg +". Please enter key size(1-26) as key-{key size} (ex ckey-22)" 
 	elif (txtinput == 'key'):
 	    key=self.request.get("keynum")
 	    caes = caesar.CaesarCipherTool(mode,msg)
@@ -627,7 +627,7 @@ class CaesarHandler(webapp.RequestHandler):
 		txtinput="Your translated message: " + caes.getTranslatedMessage() + ". Please type tb for toolbox, h for help"
 		
 	    else:
-		txtinput="Your key is not valid it must be in range (1 <= key <= 26). Please try again. key-{key size} (ex key-22)" + key
+		txtinput="Your key is not valid it must be in range (1 <= key <= 26). Please try again. key-{key size} (ex ckey-22)" + key
 	    
 	    
 	array = {'text': txtinput}	    
@@ -638,7 +638,132 @@ class CaesarHandler(webapp.RequestHandler):
         self.response.out.write(json.dumps(array))
 
 class SubstitutionHandler(webapp.RequestHandler):
+    def post(self):
+	self.session=Session()
+	mode = self.session.get("mode")
+	msg=self.session.get("msg")
+	
+        txtinput = self.request.get('method')
+	
+	if (txtinput=='s'):
+	    txtinput="You have chosen Substitution. Your mode is " + mode +" and your message is " + msg +". Please enter the 26-letter string of characters to use as a key (ex skey-QWERTYUIOPASDFGHJKLZXCVBNM)" 
+	elif (txtinput == 'key'):
+	    key=str(self.request.get("keystr"))
+	    subs = substitution.SubstitutionCipherTool(mode,msg)
+	    if (subs.checkValidKey(key) != True):
+		txtinput="The key you entered is not valid. Please re-enter the 26-letter string of characters to use as a key (ex skey-QWERTYUIOPASDFGHJKLZXCVBNM)"
+	    else:
+		subs.storekey(key)
+		translated=subs.getTranslatedMessage()
+		txtinput="Your translated message is " + translated
+	    
+	    
+	array = {'text': txtinput}	    
+        
+       
+        # Output the JSON
+        self.response.headers['Content-Type'] = 'application/json'
+        self.response.out.write(json.dumps(array))
+	
+class TransHandler(webapp.RequestHandler):
+    def post(self):
+	self.session=Session()
+	mode = self.session.get("mode")
+	msg=self.session.get("msg")
+	
+        txtinput = self.request.get('method')
+	
+	if (txtinput=='t'):
+	    txtinput="You have chosen Transposition cipher. Your mode is " + mode +" and your message is " + msg +". Please enter a key(1<= key <= length of your message) (ex: tkey-3)" 
+	elif (txtinput == 'key'):
+	    key=int(self.request.get("keystr"))
+	    maxlen=len(msg)
+	    trans = transposition.TranspositionCipherTool(mode,msg,maxlen)
+	    keynum=trans.display()
+	    if(key >= 1 and key <= int(maxlen)):
+		trans.storekey(key)
+		translated=trans.getTranslatedMessage()
+		txtinput="Your translated message is " + translated
+	    else:
+		self.session.delete_item("msg")
+		txtinput="Your key is not valid. Please re-enter a new message( ex: tmsg-{'This is message'})"
+	elif (txtinput=='tmsg'):
+	    msg=self.request.get("keystr")
+	    self.session['msg']=msg
+	    txtinput="Please enter a key(1<= key <= length of your message) (ex: tkey-3)" 
+	    
+	    
+	    
+	   
+	    
+		
+	    
+	    
+	array = {'text': txtinput}	    
+        
+       
+        # Output the JSON
+        self.response.headers['Content-Type'] = 'application/json'
+        self.response.out.write(json.dumps(array))
+	
+class VigenereHandler(webapp.RequestHandler):
     
+      def post(self):
+	self.session=Session()
+	mode = self.session.get("mode")
+	msg=self.session.get("msg")
+	
+        txtinput = self.request.get('method')
+	
+	if (txtinput=='v'):
+	    txtinput="You have chosen Vigenere cipher. Your mode is " + mode +" and your message is " + msg +". Please enter a string of letters to use as a key(ex: vkey-ELFMENG)" 
+	elif (txtinput == 'key'):
+	    key=self.request.get("keystr")
+	    vig = vigenere.VigenereCipherTool(mode,msg)
+	    vig.storekey(key)
+	    translated=vig.getTranslatedMessage()
+	    txtinput="Your translted message is " + translated
+	    
+	    
+	array = {'text': txtinput}	    
+        
+       
+        # Output the JSON
+        self.response.headers['Content-Type'] = 'application/json'
+        self.response.out.write(json.dumps(array))
+
+class AffineHandler(webapp.RequestHandler):
+    
+    
+    
+    def post(self):
+	self.session=Session()
+	mode = self.session.get("mode")
+	msg=self.session.get("msg")
+	symbols=""" !"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\] ^_`abcdefghijklmnopqrstuvwxyz{|}~"""
+	lenofsym=len(symbols)
+	maxsize=len(msg)
+        txtinput = self.request.get('method')
+	
+	if (txtinput=='a'):
+	    txtinput="You have chosen Affine cipher. Your mode is " + mode +" and your message is " + msg + ". Your key will be generated randomly. Please enter akey"
+	    
+	elif(txtinput=="key"):
+	    aff = affine.AffineCipherTool(mode,msg,maxsize,lenofsym)
+	    keyrandom=aff.getRandomKey()
+	    translated=aff.getTranslatedMessage()
+	    txtinput="Your translated message is " + translated
+	    
+	
+	    
+	    
+	    
+	array = {'text': txtinput}	    
+        
+       
+        # Output the JSON
+        self.response.headers['Content-Type'] = 'application/json'
+        self.response.out.write(json.dumps(array))
 	
 	
 def main ():
@@ -658,6 +783,9 @@ def main ():
 					('/cipherInter', CipherInterfaceHandler),
 					('/caesar', CaesarHandler),
 					('/sub', SubstitutionHandler),
+					('/trans', TransHandler),
+					('/vig', VigenereHandler),
+					('/affine', AffineHandler),
 					('/.*', MainHandler)], debug=True)
 					
   wsgiref.handlers.CGIHandler().run(application)

@@ -24,11 +24,41 @@
                         else if(method=='s'){
                             myurl="/sub";
                         }
+                        else if(method=='t'){
+                            myurl="/trans";
+                        }
+                        else if(method=='v'){
+                            myurl="/vig";
+                        }
+                        else if(method=='a'){
+                            myurl='/affine'
+                        }
                     }
-                    if (name.substring(0,3) == 'key'){
-                        dataString="method=key&"+"keynum=" + name.substring(4);
+                    if (name.substring(0,4) == 'ckey'){
+                        dataString="method=key&"+"keynum=" + name.substring(5);
                         myurl="/caesar";
                     }
+                    if (name.substring(0,4) == 'skey'){
+                        dataString="method=key&"+"keystr=" + name.substring(5);
+                        myurl="/sub";
+                    }
+                    if (name.substring(0,4) == 'tkey'){
+                        dataString="method=key&"+"keystr=" + name.substring(5);
+                        myurl="/trans";
+                    }
+                    if (name.substring(0,4) == 'tmsg'){
+                        dataString="method=tmsg&"+"keystr=" + name.substring(5);
+                        myurl="/trans";
+                    }
+                    if (name.substring(0,4) == 'vkey'){
+                        dataString="method=key&"+"keystr=" + name.substring(5);
+                        myurl="/vig";
+                    }
+                    if (name.substring(0,4) == 'akey'){
+                        dataString="method=key";
+                        myurl="/affine";
+                    }
+                                        
         
                     var op=document.getElementById('txtValue').value;
                     // This creates the AJAX connection
