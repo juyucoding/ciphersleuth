@@ -37,6 +37,11 @@ a{
     display:inline-block;
     
 }
+#working{
+    border:1px solid black;
+    height:555px;
+    overflow:scroll;
+}
 #letter{
     height:580px;
     width:700px;

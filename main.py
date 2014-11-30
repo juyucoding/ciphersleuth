@@ -7,7 +7,8 @@ from google.appengine.ext.webapp import util
 from google.appengine.ext.webapp import template
 from google.appengine.ext import db
 from util.sessions import Session
-#import json
+import json
+#from django.utils import simplejson as json
 from random import randint
 
 
@@ -556,7 +557,60 @@ class SavingHandler(webapp.RequestHandler):
 	temp=os.path.join(os.path.dirname(__file__), 'templates/'+addr +'.html')
 	self.response.headers['Content-Type'] = 'text/html'
 	self.response.out.write(str(template.render(temp,{"username":username,'msg':msg, "level":level+" / 5"})))
+
+class TerminalHandler(webapp.RequestHandler):
+    def post(self):
+	echo=self.request.get("msg")
+	username=''
+	msg=''
+	level=''
 	
+	temp=os.path.join(os.path.dirname(__file__), 'templates/game1.html')
+	self.response.headers['Content-Type'] = 'text/html'
+	self.response.out.write(str(template.render(temp,{"username":username,'msg':msg, "level":level+" / 5", "echo":echo})))
+	
+class SampleHandler(webapp.RequestHandler):
+    def get(self):
+	temp=os.path.join(os.path.dirname(__file__), 'templates/sample.html')
+	self.response.headers['Content-Type'] = 'text/html'
+	self.response.out.write(str(template.render(temp,{})))
+	
+    def post(self):
+        # Our POST Input
+	self.session=Session()
+        txtinput = self.request.get('txtValue')
+	mode=self.request.get('mode')
+	
+	if (txtinput == 'show files'):
+	    txtinput="Show Files: Ciphers.py Subsitution.py"
+        elif (txtinput == "help" or txtinput =='h'):
+	    txtinput="Would you like to go to the tutorial for the Caesar cipher(c), Substitution cipher(s), Transposition cipher(t), Vigenere cipher(v), or Affine cipher(a)? You can also type toolbox(tb) to use the ciphers."  
+	elif(txtinput == "tb"):
+	    txtinput="You have selected toolbox. Please select a mode(e for Encryption, d for Decryption) and type a message( ex- d(mode),Hello(message) )?"
+	elif(mode=='e' or mode=='d'):
+	    self.session.delete_item('mode')
+	    self.session['mode']=mode
+	    msg=self.request.get('msg')
+	    self.session.delete_item('msg')
+	    self.session['msg']=msg
+	    if (mode =='e'):
+		mo="Encryption"
+	    else:
+		mo="Decryption"
+	    txtinput="You have chosen " + mo +" and your message is " + msg
+	
+	    
+	    
+	    
+	
+	array = {'text': txtinput}	    
+        
+       
+        # Output the JSON
+        self.response.headers['Content-Type'] = 'application/json'
+        self.response.out.write(json.dumps(array))
+
+
 	
 def main ():
   application = webapp.WSGIApplication ([('/tdetail', DetailHandler),
@@ -571,6 +625,8 @@ def main ():
 					('/existing', ExistingHandler),
 					('/tmain', TmainHandler),
 					('/exiting', ExitHandler),
+					('/terminal', TerminalHandler),
+					('/sample', SampleHandler),
 					('/.*', MainHandler)], debug=True)
 					
   wsgiref.handlers.CGIHandler().run(application)

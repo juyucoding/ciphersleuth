@@ -4,64 +4,46 @@
         <link href="/static/sgame.css" rel="stylesheet" type="text/css">
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <link href='http://fonts.googleapis.com/css?family=Special+Elite|Coming+Soon' rel='stylesheet' type='text/css'>
-    <script language='Javascript' type="text/javascript">
-            
-            var ajaxVariable = false;
-            
-            function ajaxFunction(url)
-            {
-                ajaxVariable = false;
-                
-                try {
-                    ajaxVariable = new XMLHttpRequest();
-                } catch(e){
-                    try {
-                        ajaxVariable = new ActiveXObject("Msxml2.XMLHTTP");
-                    } catch(e) {
-                        try {
-                            ajaxVariable = new ActiveXObject("Microsoft.XMLHTTP");
-                        } catch(e) {
-                            alert("Your browser is not compatible");
-                            return false;
+    <script type="text/javascript" charset="utf-8">
+           $(document).ready(function(){
+                // This will run when the item of class 'button' is clicked
+                $(".button").click(function() {
+                   
+                    // Grabs the text input
+                    var name = $("input#txtValue").val();
+                    var dataString = 'txtValue='+ name; 
+                    if (name.charAt(0)=='e' || name.charAt(0)=='d'){
+                        dataString="mode=" + name.charAt(0) + "&msg=" + name.substring(2);
+                    } 
+        
+                    var op=document.getElementById('txtValue').value;
+                    // This creates the AJAX connection
+                    document.getElementById('txtValue').value='';
+                    $.ajax({
+                        type: "POST",
+                        url: "/sample",
+                        data: dataString,
+                        success: function(data) {
+                            
+                            if(op == 'help'){
+                                $('<p>').text("CipherSleuth> " + data.text).appendTo('#display');
+                            }
+                            else if(op=="clean"){
+                                $('#display').html("");
+                            }
+                            else if(op=='tb'){
+                                 $('#display').html("------Cipher Sleuth Tool Box-----");
+                                 $('<p>').text("> " + data.text).appendTo('#display');  
+                            }
+                            else{
+                                $('<p>').text("> " + data.text).appendTo('#display');  
+                            }
                         }
-                    }
-                }
-                
-                ajaxVariable.onreadystatechange = ajaxReply;
-                alert(url);
-                var str="hello";
-                var post_str="greeting=" + str;
-                ajaxVariable.open('GET', url, true);
-                ajaxVariable.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-                ajaxVariable.setRequestHeader("Connection", "close");
-                
-                ajaxVariable.send(post_str);
-                
-                return true;
-                
-            }
-            
-            function ajaxReply()
-            {
-           
-                if (ajaxVariable.readyState == 4)
-                {
-                    alert(ajaxVariable.status);
-                    
-                    if (ajaxVariable.status == 200)
-                    {
-                        alert(ajaxVariable.responseText);
-                        
-                    }
-                    else
-                    {
-                        alert("Something went wrong!" + ajaxVariable.status.toString() + '.');
-                        return;
-                    }
-                }
-           }
-            
-</script>
+                    });
+                return false;
+                });
+            });
+           </script>
        
     
     
@@ -111,10 +93,23 @@
                         <p>Mrs.J</p>
                         </div>
                 
-                </div>
-                <div id="terminal">
-                    Terminal
-                </div>
+                    </div>
+                    <div id="terminal">
+                        <div id="working">
+                        <h2>Cipher Sleuth Shell</h2>
+                        <p>Welcome to the CipherSleuth toolbox!</p>
+                        <p>Here, you can access the functions you need to decode the messages and move to each level.</p>
+                        <p>Sometimes you will be given the key to decrypt a message, other times you might have to keep trying different keys until you get an answer that makes sense.</p>
+                        <p>Would you like to go the help menu or the cipher toolbox?'</p> 
+                        
+                        <div id="display"></div>
+                        </div>
+                        <div id="command">
+                        <form name="contact" method="post" action="">
+                        <input type="text" size=114 id="txtValue" name='txtValue'><input type="submit" name="submit" class="button" id="submit_btn" value="Send" />
+                        </form>
+                        </div>
+                    </div>
                 
                 </div>
         </div>
