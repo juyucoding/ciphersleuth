@@ -9,12 +9,19 @@ class TranspositionCipherTool:
 # Transposition Cipher Encryption
 # http://inventwithpython.com/hacking (BSD Licensed)
 # made some modifications to source
-	def __init__(self, mode, message):
+	def __init__(self, mode, message,maxlen):
 		self.mode = mode
 		self.message = message
 		self.name = 'transposition'
-		self.MAX_KEY_SIZE = len(self.message)
+		self.maxlen=maxlen
+		#self.MAX_KEY_SIZE = len(self.message)
 	key = 0
+	def display(self):
+		return self.mode + " " +self.message + " " + self.name+" "+str(self.maxlen)
+	def getlen(self):
+		return self.MAX_KEY_SIZE
+	def storekey(self,key):
+		self.key=key
 	def getKey(self):
 		while True:
 			print('Enter the key number (1-%s)' % (self.MAX_KEY_SIZE))

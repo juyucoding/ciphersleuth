@@ -14,6 +14,8 @@ class VigenereCipherTool:
 		self.message = message
 		self.name = 'vigenere'
 	LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+	def storekey(self,key):
+		self.key=key
 	def getKey(self):
 		print('Input a string of letters to use as a key:')
 		self.key = raw_input()

@@ -1,0 +1,104 @@
+<html>
+    <head>
+        <title>CipherSleuth</title>
+        <link href="/static/main.css" rel="stylesheet" type="text/css">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <link href='http://fonts.googleapis.com/css?family=Special+Elite|Coming+Soon' rel='stylesheet' type='text/css'>
+    <script language='Javascript' type="text/javascript">
+            
+            var ajaxVariable = false;
+            
+            function ajaxFunction(url)
+            {
+                ajaxVariable = false;
+                
+                try {
+                    ajaxVariable = new XMLHttpRequest();
+                } catch(e){
+                    try {
+                        ajaxVariable = new ActiveXObject("Msxml2.XMLHTTP");
+                    } catch(e) {
+                        try {
+                            ajaxVariable = new ActiveXObject("Microsoft.XMLHTTP");
+                        } catch(e) {
+                            alert("Your browser is not compatible");
+                            return false;
+                        }
+                    }
+                }
+                
+                ajaxVariable.onreadystatechange = ajaxReply;
+                alert(url);
+                var str="hello";
+                var post_str="greeting=" + str;
+                ajaxVariable.open('GET', url, true);
+                ajaxVariable.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                ajaxVariable.setRequestHeader("Connection", "close");
+                
+                ajaxVariable.send(post_str);
+                
+                return true;
+                
+            }
+            
+            function ajaxReply()
+            {
+           
+                if (ajaxVariable.readyState == 4)
+                {
+                    alert(ajaxVariable.status);
+                    
+                    if (ajaxVariable.status == 200)
+                    {
+                        alert(ajaxVariable.responseText);
+                        
+                    }
+                    else
+                    {
+                        alert("Something went wrong!" + ajaxVariable.status.toString() + '.');
+                        return;
+                    }
+                }
+           }
+            
+</script>
+       
+    
+    
+    
+    </head>
+    
+    <body style="background-color:black;">
+        
+        <div id="wrapper">
+        <div id="header">
+            <center>
+            <h1 id='title'><a href="main.html" class="head"><span style="font-size:0.5em">Cipher Sleuth</span></a></h1>
+            </center>
+        </div>
+            
+            
+        
+        
+        <div id="content">
+            <!--<center><h2>Please press <a href="/game">HERE</a> to play a game</h2></center>-->
+                <div id="frame">
+                <h3 id="loggineduser">{{ greeting }}<span style="color:white;" class='lookupid'>Student ID: </span><a href="/logout" id='loged'><span style="color:white; text-decoration:underline" class='lookupid'>{{ loggedUser }}</a></span></h3>
+                <br />
+                <div id='teacher_display'>
+                    
+                <table border=1 cellpadding=4>
+                <tr class='tr'><td class='stable'>Number</td><td class='stable'>Game ID</td><td class='stable'>Current Level</td><td class='stable'>Completion</td><td class='stable'>Last active</td></tr>
+                {% for r in result %}
+                <tr class='tr'><td class='stable'><center>{{forloop.counter}}</center></td><td class='stable'>{{r.game_id}}</td><td class='stable'>{{r.current_level}}</td><td class='stable'>{{r.completion}}</td><td class='stable'>{{r.active_time}}</td></tr>
+                {% endfor %}
+               </table>
+                    
+                <h2><a href="/"><span class='stable'>Go back to Main</span></a></h2>
+                </div>
+                </div>
+        </div>
+        </div>
+        
+    </body>
+</html>

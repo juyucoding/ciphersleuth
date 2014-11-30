@@ -13,8 +13,8 @@ class SubstitutionCipherTool:
 	def __init__(self, mode, message):
 		self.mode = mode
 		self.message = message
-		self.name = 'substitution'
-	LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+		self.name = 'substitution'		
+		self.LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 	def checkValidKey(self,key):
 		keyList = list(key)
 		lettersList = list(self.LETTERS)
@@ -33,6 +33,8 @@ class SubstitutionCipherTool:
 			print('That key is invalid. Please enter a new one:')
 			self.key = raw_input()
 		return self.key
+	def storekey(self,keystr):
+		self.key=keystr
 	def getTranslatedMessage(self):
 		translated = ''
 		charsA = self.LETTERS

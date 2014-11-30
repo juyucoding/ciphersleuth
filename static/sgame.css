@@ -1,6 +1,7 @@
 @import url(http://fonts.googleapis.com/css?family=Special+Elite|Shadows+Into+Light+Two);
 @import url(http://fonts.googleapis.com/css?family=Special+Elite|Shadows+Into+Light+Two|Calligraffitti);
 @import url(http://fonts.googleapis.com/css?family=Special+Elite|Shadows+Into+Light+Two|Calligraffitti|Audiowide);
+@import url(http://fonts.googleapis.com/css?family=Armata);
 a{
     text-decoration: none;
     color: black;
@@ -21,6 +22,9 @@ a{
     
 }
 #username {
+    border:3px solid black;
+    background-color:gray;
+    padding:4px;
     color: white;
     margin-left:8px;
     font-size:1.5em;
@@ -32,6 +36,11 @@ a{
     //border-top:1px solid black;
     display:inline-block;
     
+}
+#working{
+    border:1px solid black;
+    height:555px;
+    overflow:scroll;
 }
 #letter{
     height:580px;
@@ -140,4 +149,36 @@ a{
     background-color:black;
     color:white;
 }
-
+#saving{
+    color:white;
+    margin-left:20px;
+    border: 3px solid green;
+    padding:3px;
+    font-family: 'Audiowide';
+    background-color:black;
+}
+#saving a{
+    color:white;
+}
+#saving a:hover{
+    background-color:green;
+    color:black;
+}
+#exiting{
+    color:black;
+    margin-left:20px;
+    border: 3px solid green;
+    padding:3px;
+    font-family: 'Audiowide';
+    background-color:white;
+}
+#exiting a{
+    color:black;
+}
+#exiting a:hover{
+    background-color:green;
+    color:black;
+}
+.decode{
+    font-family: 'Armata', sans-serif;
+}

@@ -1,0 +1,45 @@
+     <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+    <html xmlns="http://www.w3.org/1999/xhtml">
+        <head>
+           <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+           <title>Ajax With Jquery</title>
+         
+           <!-- Grab the JQuery API from the Google servers -->
+           <script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+
+           <!-- Our own JQuery code to do the AJAX-y stuff -->
+           <script type="text/javascript" charset="utf-8">
+           $(document).ready(function(){
+                // This will run when the item of class 'button' is clicked
+                $(".button").click(function() {
+                   
+                    // Grabs the text input
+                    var name = $("input#txtValue").val();
+            
+                    var dataString = 'txtValue='+ name;   
+
+                    // This creates the AJAX connection
+                    $.ajax({
+                        type: "POST",
+                        url: "/sample",
+                        data: dataString,
+                        success: function(data) {
+                            $('#display').html(data.text);
+                        }
+                    });
+                return false;
+                });
+            });
+           </script>
+        </head>
+
+        <body>
+             <form name="contact" method="post" action="">
+                <label for="txtValue">Enter a value : </label>
+                <input type="text" name="txtValue" value="" id="txtValue">
+                <input type="submit" name="submit" class="button" id="submit_btn" value="Send" />
+             </form>
+             <div id="display">
+             </div>
+       </body>
+    </html> 
