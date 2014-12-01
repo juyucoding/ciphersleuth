@@ -15,8 +15,8 @@ class AffineCipherTool:
 		self.message = message
 		self.name = 'affine'
 		self.maxsize = maxsize
-		self.SYMBOLS=lenofsym
 		self.SYMBOLS_str = """ !"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\] ^_`abcdefghijklmnopqrstuvwxyz{|}~""" # note the space at the front
+		self.SYMBOLS=len(self.SYMBOLS_str)
 	key = 0
 	def getRandomKey(self):
 		while True:
