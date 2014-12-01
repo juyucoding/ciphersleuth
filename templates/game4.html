@@ -6,6 +6,14 @@
     <link href='http://fonts.googleapis.com/css?family=Special+Elite|Coming+Soon' rel='stylesheet' type='text/css'>
     <script type="text/javascript" charset="utf-8">
            $(document).ready(function(){
+                 $("#colorw").click(function(){
+                    $("#terminal").css("background-color","white");
+                    $("#terminal").css("color","black"); 
+                })
+                $("#colorb").click(function(){
+                    $("#terminal").css("background-color","black");
+                    $("#terminal").css("color","white"); 
+                })
                 // This will run when the item of class 'button' is clicked
                 $(".button").click(function() {
                     myurl="/cipherInter";
@@ -63,6 +71,7 @@
                     var op=document.getElementById('txtValue').value;
                     // This creates the AJAX connection
                     document.getElementById('txtValue').value='';
+                    $('.gone').html("");
                     $.ajax({
                         type: "POST",
                         url: myurl,
@@ -138,18 +147,18 @@
                 </div>
                 <div id="terminal">
                         <div id="working">
-                        <h2>Cipher Sleuth Shell</h2>
-                        <p>Welcome to the CipherSleuth toolbox!</p>
-                        <p>Here, you can access the functions you need to decode the messages and move to each level.</p>
-                        <p>Sometimes you will be given the key to decrypt a message, other times you might have to keep trying different keys until you get an answer that makes sense.</p>
-                        <p>Would you like to go the help menu or the cipher toolbox?(tb)'</p> 
+                        <p class='gone'>Welcome to the CipherSleuth toolbox!</p>
+                        
+                        <p class='gone'>Here, you can access the functions you need to decode the messages and move to each level.
+                        Sometimes you will be given the key to decrypt a message, other times you might have to keep trying different keys until you get an answer that makes sense.
+                        <p>Command line to use: show files(sf or show files), clean(cl or clean)</p>
+                        <p>Would you like to go the help menu or the cipher toolbox (tb)?'</p> 
                         
                         <div id="display"></div>
                         </div>
                         <div id="command">
                         <form name="contact" method="post" action="">
-                        <input type="text" size=114 id="txtValue" name='txtValue'><input type="submit" name="submit" class="button" id="submit_btn" value="Send" />
-                        </form>
+                        <input type="text" size=95 id="txtValue" name='txtValue'><input type="submit" name="submit" class="button" id="submit_btn" value="SEND"><input type="button" value="WHITE" id="colorw"><input type="button" value="BLACK" id="colorb">                        </form>
                         </div>
                     </div>
                 

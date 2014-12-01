@@ -2,6 +2,7 @@
 @import url(http://fonts.googleapis.com/css?family=Special+Elite|Shadows+Into+Light+Two|Calligraffitti);
 @import url(http://fonts.googleapis.com/css?family=Special+Elite|Shadows+Into+Light+Two|Calligraffitti|Audiowide);
 @import url(http://fonts.googleapis.com/css?family=Armata);
+@import url(http://fonts.googleapis.com/css?family=Cinzel);
 a{
     text-decoration: none;
     color: black;
@@ -63,12 +64,16 @@ a{
     overflow:scroll;
 }
 #terminal{
-    margin-left:20px;
+    font-family: 'Cinzel', serif;
+    margin-left:10px;
     background-color:white;
     height:580px;
     width:650px;
     border: 1px solid black;
     float:left;
+    padding:4px;
+    color:white;
+    background-color: black;
 }
 #gInterface{
     margin-top: 20px;
