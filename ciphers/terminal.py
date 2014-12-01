@@ -7,7 +7,8 @@ import wsgiref.handlers
 #from google.appengine.ext.webapp import template
 #from google.appengine.ext import db
 #from util.sessions import Session
-import json
+#import json
+from django.utils import simplejson as json
 import sys
 import ciphers
 

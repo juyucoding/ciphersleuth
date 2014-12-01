@@ -2,7 +2,8 @@ import math
 import random
 import os
 import wsgiref.handlers
-import json
+#import json
+from django.utils import simplejson as json
 import sys
 
 #Sourced from http://inventwithpython.com/cipher.py

@@ -7,8 +7,8 @@ from google.appengine.ext.webapp import util
 from google.appengine.ext.webapp import template
 from google.appengine.ext import db
 from util.sessions import Session
-import json
-#from django.utils import simplejson as json
+#import json
+from django.utils import simplejson as json
 from random import randint
 from ciphers import caesar, substitution, transposition, vigenere, affine
 
