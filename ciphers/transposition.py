@@ -35,12 +35,12 @@ class TranspositionCipherTool:
 			# "rows" of the grid that the plaintext is written on by using a list
 			# of strings. First, we need to calculate a few values.
 			# The number of "columns" in our transposition grid:
-			numOfColumns = int(math.ceil(len(self.message) / self.key))
+			numOfColumns = int(math.ceil(self.maxlen / self.key))+1
 			# numOfColumns = int(numOfColumns)
 			# The number of "rows" in our grid will need:
 			numOfRows = self.key
 			# The number of "shaded boxes" in the last "column" of the grid:
-			numOfShadedBoxes = (numOfColumns * numOfRows) - len(self.message)
+			numOfShadedBoxes = (numOfColumns * numOfRows) - self.maxlen
 
 			# Each string in plaintext represents a column in the grid.
 			plaintext = [''] * numOfColumns
