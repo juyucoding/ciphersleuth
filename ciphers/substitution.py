@@ -22,7 +22,7 @@ class SubstitutionCipherTool:
 		lettersList.sort()
 		result = False
 		if keyList != lettersList:
-			print('This key is invalid.')
+			return result
 		else:
 			result = True
 		return result

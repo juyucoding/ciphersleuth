@@ -25,6 +25,14 @@ class AffineCipherTool:
 			if cryptomath.gcd(self.keyA, self.SYMBOLS) == 1:
 				self.key=self.keyA * self.SYMBOLS + self.keyB
 				return self.keyA * self.SYMBOLS + self.keyB
+	def storeKey(self,key):
+		self.key = int(key)
+		self.keyA, self.keyB = self.getKeyParts(self.key)
+		self.badKey = self.checkKeys(self.keyA, self.keyB, 'encrypt')
+		if self.okay == False:
+			return False
+		else:
+			return True
 	def getKey(self):
 		while True:
 			print('Would you like a randomly generated key?')
@@ -38,7 +46,7 @@ class AffineCipherTool:
 				if (key >= 1 and key <= 65534):
 					self.key = key
 					self.keyA, self.keyB = self.getKeyParts(self.key)
-					self.checkKeys(self.keyA, self.keyB, 'encrypt')
+					self.badKey = self.checkKeys(self.keyA, self.keyB, 'encrypt')
 					if self.okay == True:
 						return key
 	def getKeyParts(self, key):
@@ -49,16 +57,16 @@ class AffineCipherTool:
 		self.okay = True
 		if self.keyA == 1 and self.mode == 'e':
 			self.okay = False
-			print('The affine cipher becomes incredibly weak when key A is set to 1. Choose a different key.')
+			return 'The affine cipher becomes incredibly weak when key A is set to 1. Choose a different key.'
 		if self.keyB == 0 and self.mode == 'e':
 			self.okay = False
-			print('The affine cipher becomes incredibly weak when key B is set to 0. Choose a different key.')
+			return 'The affine cipher becomes incredibly weak when key B is set to 0. Choose a different key.'
 		if self.keyA < 0 or self.keyB < 0 or self.keyB > (self.SYMBOLS - 1):
 			self.okay = False
-			print('Key A must be greater than 0 and Key B must be between 0 and %s.' % (self.SYMBOLS - 1))
+			return 'Key A must be greater than 0 and Key B must be between 0 and %s.' % (self.SYMBOLS - 1)
 		if cryptomath.gcd(self.keyA, self.SYMBOLS) != 1:
 			self.okay = False
-			print('Key A (%s) and the symbol set size (%s) are not relatively prime. Choose a different key.' % (self.keyA, self.SYMBOLS))
+			return 'Key A (%s) and the symbol set size (%s) are not relatively prime. Choose a different key.' % (self.keyA, self.SYMBOLS)
 	def getTranslatedMessage(self):
 		if self.mode[0] == 'd':
 			self.keyA, self.keyB = self.getKeyParts(self.key)

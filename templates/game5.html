@@ -55,7 +55,7 @@
                         myurl="/vig";
                     }
                     if (name.substring(0,4) == 'akey'){
-                        dataString="method=key";
+                        dataString="method=key&"+"keynum=" + name.substring(5);
                         myurl="/affine";
                     }
                                         
@@ -121,13 +121,13 @@
                     <div id="letter">
                         <div id="instruction">
                         <p>Dear, {{ username }}</p>
-                        <p>Finally we are here. I am very proud of you that you made it! It has been a great time working with you and I truly believe that you are very talanted!
-                        In order to complete the mission, there is one final step. It won't be easy, but I frimly believe you can do it.</p>
-                        <p>This last message will tell you where to go and the code that you will need. Please practice with terminal on the left before you leave.</p>
+                        <p>Finally we are here. I am very proud of you that you made it! It has been a great time working with you and I truly believe that you are very talented!
+                        In order to complete the mission, there is one final step. It won't be easy, but I firmly believe you can do it.</p>
+                        <p>This last message will tell you where to go and the code that you will need. Please practice with terminal on the right before you leave.</p>
                         <p class='decode'>Decode message below: </p>
                         <p class='decode'>Key: 2868</p>
                         <p class='decode'>Encoded msg: </p>
-                        <p class='decode'>^'sX's^}pigMps{'t;%sK'g%s9;sw</p>
+						<p class='decode'>^'sX's^}pigMps{'t;%sK'g%s9;sw></p>
                         
                         <p>I wish your best luck and hope I can see you again!</p>
                         

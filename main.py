@@ -651,11 +651,11 @@ class SubstitutionHandler(webapp.RequestHandler):
 	    key=str(self.request.get("keystr"))
 	    subs = substitution.SubstitutionCipherTool(mode,msg)
 	    if (subs.checkValidKey(key) != True):
-		txtinput="The key you entered is not valid. Please re-enter the 26-letter string of characters to use as a key (ex skey-QWERTYUIOPASDFGHJKLZXCVBNM)"
+			txtinput="The key you entered is not valid. Please re-enter the 26-letter string of characters to use as a key (ex skey-QWERTYUIOPASDFGHJKLZXCVBNM)"
 	    else:
-		subs.storekey(key)
-		translated=subs.getTranslatedMessage()
-		txtinput="Your translated message is " + translated
+			subs.storekey(key)
+			translated=subs.getTranslatedMessage()
+			txtinput="Your translated message is " + translated
 	    
 	    
 	array = {'text': txtinput}	    
@@ -722,7 +722,7 @@ class VigenereHandler(webapp.RequestHandler):
 	    vig = vigenere.VigenereCipherTool(mode,msg)
 	    vig.storekey(key)
 	    translated=vig.getTranslatedMessage()
-	    txtinput="Your translted message is " + translated
+	    txtinput="Your translated message is " + translated
 	    
 	    
 	array = {'text': txtinput}	    
@@ -746,13 +746,17 @@ class AffineHandler(webapp.RequestHandler):
         txtinput = self.request.get('method')
 	
 	if (txtinput=='a'):
-	    txtinput="You have chosen Affine cipher. Your mode is " + mode +" and your message is " + msg + ". Your key will be generated randomly. Please enter akey"
+	    txtinput="You have chosen Affine cipher. Your mode is " + mode +" and your message is " + msg + ". Please enter a key (ex: akey-87)."
 	    
-	elif(txtinput=="key"):
+	elif (txtinput == 'key'):
+	    key=self.request.get("keynum")
 	    aff = affine.AffineCipherTool(mode,msg,maxsize,lenofsym)
-	    keyrandom=aff.getRandomKey()
-	    translated=aff.getTranslatedMessage()
-	    txtinput="Your translated message is " + translated
+	    #get key
+	if(aff.storeKey(key) == False):
+		txtinput = aff.badKey
+	else:
+		translated=aff.getTranslatedMessage()
+		txtinput="Your translated message is " + translated
 	    
 	
 	    

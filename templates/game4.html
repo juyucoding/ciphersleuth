@@ -55,7 +55,7 @@
                         myurl="/vig";
                     }
                     if (name.substring(0,4) == 'akey'){
-                        dataString="method=key";
+                        dataString="method=key&"+"keynum=" + name.substring(5);
                         myurl="/affine";
                     }
                                         
