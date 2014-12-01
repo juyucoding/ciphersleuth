@@ -13,7 +13,7 @@
                     var name = $("input#txtValue").val();
                     var dataString = 'txtValue='+ name; 
                     if (name.charAt(0)=='e' || name.charAt(0)=='d'){
-                        dataString="mode=" + name.charAt(0) + "&msg=" + name.substring(2);
+                        dataString="mode=" + name.charAt(0) + "&msg=" + name.slice(2);
                     }
                     if (name.substring(0,3) =='use'){
                         method=name.charAt(4);
@@ -144,7 +144,7 @@
                         <p>Welcome to the CipherSleuth toolbox!</p>
                         <p>Here, you can access the functions you need to decode the messages and move to each level.</p>
                         <p>Sometimes you will be given the key to decrypt a message, other times you might have to keep trying different keys until you get an answer that makes sense.</p>
-                        <p>Would you like to go the help menu or the cipher toolbox?'</p> 
+                        <p>Would you like to go the help menu or the cipher toolbox (tb)?'</p> 
                         
                         <div id="display"></div>
                         </div>

@@ -585,9 +585,19 @@ class CipherInterfaceHandler(webapp.RequestHandler):
 	if (txtinput == 'show files'):
 	    txtinput="Show Files: Ciphers.py Subsitution.py"
         elif (txtinput == "help" or txtinput =='h'):
-	    txtinput="Would you like to go to the tutorial for the Caesar cipher(c), Substitution cipher(s), Transposition cipher(t), Vigenere cipher(v), or Affine cipher(a)? You can also type toolbox(tb) to use the ciphers."  
+	    txtinput="Would you like to go to the tutorial for the Caesar cipher(chelp), Substitution cipher(shelp), Transposition cipher(thelp), Vigenere cipher(vhelp), or Affine cipher(ahelp)? You can also type toolbox(tb) to use the ciphers."
+	elif(txtinput == "chelp"):
+		txtinput="The Caesar cipher works by substituting letters for different letters a certain number away from the original letter. For example, the letter 'A' with a key of 2 would become 'C' because C is 2 letters away from 'A'. The word 'CAT' would be encoded to say 'ECV'. To figure out the key to decode a message, you can keep trying numbers between 1 and 26 until one decodes the message into something that makes sense."
+	elif(txtinput == "shelp"):
+		txtinput="The substitution cipher has a key of 26 letters, each one in the alphabet, all reordered, and matches the old letters of the alphabet to the new ones. So if the letter 'A' maps to 'V' because it is the first letter of the key, 'B' maps to 'Q' because 'Q' is the second letter in the key. If 'T' maps to 'P', the code word for 'TAB' would be 'PVQ'."
+	elif(txtinput == "thelp"):
+		txtinput="The transposition cipher works by mapping different letters to columns in a table, and then putting the rows of the table together to make the ciphertext. For example, to encode the sentence 'The apple is red.' with a key of 3, the cipher will make a table with 3 columns. Because there are 17 characters in this sentence, we take 17/3 which gives 5 with a remainder of 2. This means we need 6 rows and one space will not be used since there are 17 characters and 18 table entries. The cipher will put one letter in each column of the table so that they read [T,h,e; ,a,p;p,l,e; ,i,s; ,r,e;d,.,X] (commas separate columns, semicolumns separate rows) The resulting ciphertext will go down each column one at a time putting together the characters, giving the ciphertext 'T p  dhalir.epese'"
+	elif(txtinput == "vhelp"):
+		txtinput="The Vigenere cipher works almost like the Caesar cipher, except for every letter, the number of letters it shifts is different. The alphabet index of each letter in the key tells how many letters to shift each letter of plaintext. To encode the sentence 'The sky is blue' with the key 'cat', the index of each letter in the key 'cat' is the shift number. The first letter of the message 'T' will shift 3 letters since the first letter of the key is 'c', and its index is 3. So, the first letter of the ciphertext will be 'W'. The next letter will shift 1 because the index of a is one, so 'h' will become 'i'. The index of 't' is 20, so 'e' will shift 20 to become 'y'. When the letters in the key run out, it just starts over, so the next letter of the message 's' will shift 3 to 'v' because the next shift will be the letter 'c' again."
+	elif(txtinput == "ahelp"):
+		txtinput="The affine cipher has a few more steps than the other ciphers. First, it maps each letter of the plaintext to its alphabetic index starting at 0. The word 'SLEUTH' would map to the numbers 18, 11, 4, 20, 19, 7. Let's say we want to include special characters in our encoded alphabet, which will now have a length of 96 instead of 26. We then need to select two numbers for the key, and the first number has to be coprime with 96, meaning it does not share any factors with 96. Since 96's prime factors are 2 and 3, the first part of the key can be any number not divisible by 2 or 3. Our numbers a and b will be used in the equation ax+b, where x is the letter index and the result of which needs to be bigger than 96 for reasons we'll explain in a minute. We'll choose a to be 31 and b to be 57. When we use each letter's index as x in the equation, we get 615, 398, 181, 677, 646, 274. To map these numbers to our alphabet of symbols and letters, we need them to be mod 96. This means we want to divide them by 96 and use the remainder as the new number. After doing that, our new numbers are 39, 14, 85, 5, 70, 82. To get our key, we can multiply a by 96 and add b, which gives us 3033. Mapping the new numbers to their indexes in our alphabet gives us the ciphertext '&lTcEQ'."
 	elif(txtinput == "tb"):
-	    txtinput="You have selected toolbox. Please select a mode(e for Encryption, d for Decryption) and type a message( ex- d(mode),Hello(message) )?"
+	    txtinput="You have selected toolbox. Please select a mode(e for Encryption, d for Decryption) and type a message( ex: d-Hello )?"
 	elif(mode=='e' or mode=='d'):
 	    self.session.delete_item('mode')
 	    self.session['mode']=mode
@@ -755,7 +765,7 @@ class AffineHandler(webapp.RequestHandler):
 	if(aff.storeKey(key) == False):
 		txtinput = aff.badKey
 	else:
-		translated=aff.getTranslatedMessage()
+		translated = aff.getTranslatedMessage()
 		txtinput="Your translated message is " + translated
 	    
 	
