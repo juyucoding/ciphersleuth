@@ -55,7 +55,7 @@
                         myurl="/vig";
                     }
                     if (name.substring(0,4) == 'akey'){
-                        dataString="method=key";
+                        dataString="method=key&"+"keynum=" + name.substring(5);
                         myurl="/affine";
                     }
                                         
@@ -122,13 +122,14 @@
                     <div id="letter">
                         <div id="instruction">
                         <p>Dear, {{ username }}</p>
-                        <p>Hi, great job on decoding the message! By the time you recieve the letter, you probably just solved it or less. Now, with the decoded message I have
+                        <p>Hi, great job on decoding the message! By the time you receive the letter, you probably just finished solving the puzzle. Now, with the decoded message I have
                         another mission for you.</p>
                         <p>This will tell you what to get and where to go next. The item will be very useful when you do the final mission. <i>[Hint: This book is wirtten by your grandmother/]</i></p>
+						<p>The key for this cipher is a little bit tricky: it is a 26-letter string of characters and to get the key, you need to take the first letter of each word in the sentence given and put them together.</p>
                         
                         <p class='decode'>Decode message below: </p>
                         <p class='decode'>Sentence</p>
-                        <p class='decode'>Paul's xylophone didn't zealously integrate bank unity. At five, loony chaos met work, not great. He even ordered quickly stopping terror in Kelly's volumnious rowdy yelling</p>
+                        <p class='decode'>Paul's xylophone didn't zealously join band unity. At five, loony chaos met work, not great. He even ordered quickly stopping terror in Kelly's volumnious rowdy yelling</p>
                         <p class='decode'>Encoded message:</p>
                         <p class='decode'>UJS WRQSJOR GB SFWJ PNZ UG SG PFOHGOS</p>
                         <p>I wish your best luck!</p>

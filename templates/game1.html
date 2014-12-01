@@ -55,7 +55,7 @@
                         myurl="/vig";
                     }
                     if (name.substring(0,4) == 'akey'){
-                        dataString="method=key";
+                        dataString="method=key&"+"keynum=" + name.substring(5);
                         myurl="/affine";
                     }
                                         
@@ -126,9 +126,9 @@
                         <p>Your grandmother was the best engineer in the world and she worked on a very important project at NASA.
                         She often talked about you quite often while we were working together, so I decided you would be the best person to be in charge of this task.</p>
                         <p>I will tell you more detail as we work together, but I can tell you this task is related with your grandmother and it has to be kept in secret. So the rest of
-                        instruction is encoded as below.To decode this message, follow this instruction. On your left, you can work on terminal with samples</p>
-                        <p class='decode'>Deocde message below: </p>
-                        <p class='decode'>Key: 8</p>
+                        instruction is encoded as below.To decode this message, follow this instruction. On your right, you can work on terminal with samples</p>
+                        <p class='decode'>Decode message below: </p>
+                        <p class='decode'>Key: Guess the number</p>
                         <p class='decode'>Encoded msg: </p>
                         <p class='decode'>OW BW TQJZIZG</p>
                         <p>I wish you best luck!</p>
